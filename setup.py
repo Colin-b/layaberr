@@ -2,7 +2,7 @@ import os
 
 from setuptools import setup, find_packages
 
-from pycommon_error._version import __version__
+from pycommon_exception._version import __version__
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,7 +10,7 @@ with open(os.path.join(this_dir, 'README.md'), 'r') as f:
     long_description = f.read()
 
 setup(
-    name='pycommon_error',
+    name='pycommon_exception',
     version=__version__,
     description="Thin wrapper for pycommon-database and pycommon-server error handling",
     long_description=long_description,

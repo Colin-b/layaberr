@@ -8,13 +8,14 @@ logging.basicConfig(
     level=logging.DEBUG)
 logging.getLogger('sqlalchemy').setLevel(logging.DEBUG)
 
-from pycommon_error import validation_failed
-from pycommon_error import model_not_found
+from werkzeug.exceptions import Unauthorized
+
+from pycommon_exception import marshalling_exception, authorization_exception, default_exception
 
 logger = logging.getLogger(__name__)
 
 
-class FlaskRestPlusErrorsTest(unittest.TestCase):
+class FlaskRestPlusExceptionsTest(unittest.TestCase):
     def setUp(self):
         logger.info(f'-------------------------------')
         logger.info(f'Start of {self._testMethodName}')
@@ -46,7 +47,7 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
                                       'optional_date_value': '2017-10-23',
                                       'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
                                       'optional_float_value': 200}]
-                    failed_validation = validation_failed.ValidationFailed(received_data)
+                    failed_validation = marshalling_exception.ValidationFailed(received_data)
                     errors = {1: {'mandatory_integer_value': ['Missing data for required field.']}}
                     setattr(failed_validation, 'errors', errors)
                     # Call handle_exception method
@@ -69,7 +70,7 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            validation_failed.add_failed_validation_handler(TestAPI)
+            marshalling_exception.add_failed_validation_handler(TestAPI)
         except TypeError:
             pass
 
@@ -96,7 +97,7 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
                                                                     'optional_date_value': '2017-10-23',
                                                                     'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
                                                                     'optional_float_value': 200}
-                    failed_validation = validation_failed.ValidationFailed(received_data)
+                    failed_validation = marshalling_exception.ValidationFailed(received_data)
                     errors = {'mandatory_integer_value': ['Missing data for required field.']}
                     setattr(failed_validation, 'errors', errors)
                     # Call handle_exception method
@@ -113,7 +114,7 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            validation_failed.add_failed_validation_handler(TestAPI)
+            marshalling_exception.add_failed_validation_handler(TestAPI)
         except TypeError:
             pass
 
@@ -133,7 +134,7 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
                 def wrapper(func):
                     # Mock of the input (Single item)
                     row = {'value': 'my_value1'}
-                    no_model = model_not_found.ModelCouldNotBeFound(row)
+                    no_model = marshalling_exception.ModelCouldNotBeFound(row)
                     # Call handle_exception method
                     result = func(no_model)
                     # Assert output, if NOK will raise Assertion Error
@@ -146,6 +147,66 @@ class FlaskRestPlusErrorsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            model_not_found.add_model_could_not_be_found_handler(TestAPI)
+            marshalling_exception.add_model_could_not_be_found_handler(TestAPI)
+        except TypeError:
+            pass
+
+    def test_handle_unauthorized_exception(self):
+        class TestAPI:
+
+            @staticmethod
+            def model(cls, name):
+                pass
+
+            @staticmethod
+            def errorhandler(cls):
+                pass
+
+            @staticmethod
+            def raise_error():
+                raise Unauthorized
+
+            @staticmethod
+            def marshal_with(cls, code):
+                def wrapper(func):
+                    result = func('Access Unauthorized')
+                    assert (result[0] == {'message': 'Access Unauthorized'})
+                    assert (result[1] == 401)
+                    return result
+
+                return wrapper
+
+        try:
+            authorization_exception.add_unauthorized_exception_handler(TestAPI)
+        except TypeError:
+            pass
+
+    def test_default_handler(self):
+        class TestAPI:
+
+            @staticmethod
+            def model(cls, name):
+                pass
+
+            @staticmethod
+            def errorhandler(cls):
+                pass
+
+            @staticmethod
+            def raise_error():
+                raise Unauthorized
+
+            @staticmethod
+            def marshal_with(cls, code):
+                def wrapper(func):
+                    result = func('Internal Server Error')
+                    assert (result[0] == {'message': 'Internal Server Error'})
+                    assert (result[1] == 500)
+                    return result
+
+                return wrapper
+
+        try:
+            default_exception.add_exception_handler(TestAPI)
         except TypeError:
             pass

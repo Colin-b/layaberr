@@ -1,8 +1,8 @@
-# Python Common Error Module #
+# Python Common Exception Module #
 
-Thin wrapper to handle error raised through pycommon-database and pycommon-server.
+Thin wrapper for handling exceptions.
 
-The module can be used to handle exception raised by pycommon-database and pycommon-server.
+The module is used to handle exception raised in pycommon-database and pycommon-server.
 
 ### Usage ###
 
@@ -15,7 +15,7 @@ The module can be used to handle exception raised by pycommon-database and pycom
 
 ## pycommon-server ##
 
-| parameter                    | description                     |
-|:-----------------------------|:--------------------------------|
-| `model_not_found`            | Raised in case of missing model |
-| `validation_failed`          | Raised in case of invalid model |
+| parameter                    | description                                  |
+|:-----------------------------|:---------------------------------------------|
+| `default_exception`          | Default handler (500: Internal Server Error) |
+| `unauthorized_exception`     | Raised in case of unauthorized acces         |
