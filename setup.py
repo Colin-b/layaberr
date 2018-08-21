@@ -1,11 +1,9 @@
 import os
-
 from setuptools import setup, find_packages
 
 from pycommon_exception._version import __version__
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-
 with open(os.path.join(this_dir, 'README.md'), 'r') as f:
     long_description = f.read()
 
