@@ -8,12 +8,16 @@ The module is used to handle exception raised in pycommon-database and pycommon-
 
 ## pycommon-database ##
 
+Use to wrap marshalling exceptions.
+
 | parameter                    | description                                    |
 |:-----------------------------|:-----------------------------------------------|
 | `model_not_found`            | Raised in case of missing data                 |
 | `validation_failed`          | Raised in case of Marshmallow validation error |
 
 ## pycommon-server ##
+
+Use to wrap flask-restplus exceptions.
 
 | parameter                    | description                                  |
 |:-----------------------------|:---------------------------------------------|
