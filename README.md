@@ -23,3 +23,4 @@ Use to wrap flask-restplus exceptions.
 |:-----------------------------|:---------------------------------------------|
 | `default_exception`          | Default handler (500: Internal Server Error) |
 | `unauthorized_exception`     | Raised in case of unauthorized acces         |
+| `bad_request_exception`      | Raised in case the server cannot interpret the request |

@@ -1,8 +1,37 @@
 import logging
+from http import HTTPStatus
 
 from flask_restplus import fields
+from werkzeug.exceptions import BadRequest
 
 logger = logging.getLogger(__name__)
+
+
+def _bad_request_exception_model(api):
+    exception_details = {
+        'message': fields.String(description='Description of the error.',
+                                 required=True,
+                                 example='This is a description of the error.')
+    }
+    return api.model('BadRequest', exception_details)
+
+
+def add_bad_request_exception_handler(api):
+    """
+    Add the Bad Request Exception handler.
+
+    :param api: The root Api
+    """
+    exception_model = _bad_request_exception_model(api)
+
+    @api.errorhandler(BadRequest)
+    @api.marshal_with(exception_model, code=HTTPStatus.BAD_REQUEST)
+    def handle_exception(exception):
+        """This is the Bad Request error handling."""
+        logger.exception(HTTPStatus.BAD_REQUEST.description)
+        return {'message': str(exception)}, HTTPStatus.BAD_REQUEST
+
+    return HTTPStatus.BAD_REQUEST, HTTPStatus.BAD_REQUEST.description, exception_model
 
 
 class ValidationFailed(Exception):

@@ -181,6 +181,36 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
         except TypeError:
             pass
 
+    def test_handle_bad_request_exception(self):
+        class TestAPI:
+
+            @staticmethod
+            def model(cls, name):
+                pass
+
+            @staticmethod
+            def errorhandler(cls):
+                pass
+
+            @staticmethod
+            def raise_error():
+                raise Unauthorized
+
+            @staticmethod
+            def marshal_with(cls, code):
+                def wrapper(func):
+                    result = func('Input payload validation failed')
+                    assert (result[0] == {'message': 'Input payload validation failed'})
+                    assert (result[1] == 400)
+                    return result
+
+                return wrapper
+
+        try:
+            validation.add_bad_request_exception_handler(TestAPI)
+        except TypeError:
+            pass
+
     def test_default_handler(self):
         class TestAPI:
 

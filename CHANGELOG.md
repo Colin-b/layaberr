@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 1.1.0 (2018-08-23) ##
+
+### Enhancements ###
+
+- Add handler for Bad Request
+
 ## Version 1.0.0 (2018-08-20) ##
 
 ### Release notes ###
