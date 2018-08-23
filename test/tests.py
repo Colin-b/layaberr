@@ -10,7 +10,7 @@ logging.getLogger('sqlalchemy').setLevel(logging.DEBUG)
 
 from werkzeug.exceptions import Unauthorized
 
-from pycommon_error import validation_exception, authorization, default
+from pycommon_error import validation, authorization, default
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
                                       'optional_date_value': '2017-10-23',
                                       'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
                                       'optional_float_value': 200}]
-                    failed_validation = validation_exception.ValidationFailed(received_data)
+                    failed_validation = validation.ValidationFailed(received_data)
                     errors = {1: {'mandatory_integer_value': ['Missing data for required field.']}}
                     setattr(failed_validation, 'errors', errors)
                     # Call handle_exception method
@@ -70,7 +70,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            validation_exception.add_failed_validation_handler(TestAPI)
+            validation.add_failed_validation_handler(TestAPI)
         except TypeError:
             pass
 
@@ -97,7 +97,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
                                                                     'optional_date_value': '2017-10-23',
                                                                     'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
                                                                     'optional_float_value': 200}
-                    failed_validation = validation_exception.ValidationFailed(received_data)
+                    failed_validation = validation.ValidationFailed(received_data)
                     errors = {'mandatory_integer_value': ['Missing data for required field.']}
                     setattr(failed_validation, 'errors', errors)
                     # Call handle_exception method
@@ -114,7 +114,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            validation_exception.add_failed_validation_handler(TestAPI)
+            validation.add_failed_validation_handler(TestAPI)
         except TypeError:
             pass
 
@@ -134,7 +134,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
                 def wrapper(func):
                     # Mock of the input (Single item)
                     row = {'value': 'my_value1'}
-                    no_model = validation_exception.ModelCouldNotBeFound(row)
+                    no_model = validation.ModelCouldNotBeFound(row)
                     # Call handle_exception method
                     result = func(no_model)
                     # Assert output, if NOK will raise Assertion Error
@@ -147,7 +147,7 @@ class FlaskRestPlusExceptionsTest(unittest.TestCase):
         # Since TestApi is not completely mocked, add_failed_validation_handler will raise a "NoneType is not iterable
         # exception after the call to handle_exception. Exception is therefore ignored
         try:
-            validation_exception.add_model_could_not_be_found_handler(TestAPI)
+            validation.add_model_could_not_be_found_handler(TestAPI)
         except TypeError:
             pass
 
