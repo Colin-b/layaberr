@@ -12,7 +12,7 @@ Use to wrap marshalling exceptions.
 
 | HTTP code | Parameter           | Description                                    |
 |:----------|:--------------------|:-----------------------------------------------|
-| 400       | `validation_failed` | Raised in case of Marshmallow validation error |
+| 400       | `validation_failed` | Raised in case of validation error |
 | 404       | `model_not_found`   | Raised in case of missing data                 |
 
 
