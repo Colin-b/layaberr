@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 1.1.1 (2018-08-30) ##
+
+### Bug fixes ###
+
+- Only the first issue per index (in case of a list of dictionaries) was sent back after ValidationFailed
+
 ## Version 1.1.0 (2018-08-23) ##
 
 ### Enhancements ###

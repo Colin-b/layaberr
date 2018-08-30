@@ -57,15 +57,8 @@ class TestErrorHandling(JSONTestCase):
             @api.response(*validation_failed_response)
             @api.response(*default_response)
             def get(self):
-                received_data = {'optional_string_value': 'my_value1', 'mandatory_integer_value': 1,
-                                 'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23',
-                                 'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
-                                 'optional_float_value': 100}, {'optional_string_value': 'my_value2',
-                                                                'optional_enum_value': 'First Enum Value',
-                                                                'optional_date_value': '2017-10-23',
-                                                                'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
-                                                                'optional_float_value': 200}
-                errors = {'mandatory_integer_value': ['Missing data for required field.']}
+                received_data = {'key 1': 'value 1', 'key 2': 1}
+                errors = {'a field': ['an error'], 'another_field': ['first error', 'second error']}
                 raise validation.ValidationFailed(received_data, marshmallow_errors=errors)
 
         @api.route('/validation_failed_list')
@@ -73,15 +66,11 @@ class TestErrorHandling(JSONTestCase):
             @api.response(*validation_failed_response)
             @api.response(*default_response)
             def get(self):
-                received_data = [{'optional_string_value': 'my_value1', 'mandatory_integer_value': 1,
-                                  'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23',
-                                  'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
-                                  'optional_float_value': 100},
-                                 {'optional_string_value': 'my_value2', 'optional_enum_value': 'First Enum Value',
-                                  'optional_date_value': '2017-10-23',
-                                  'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00',
-                                  'optional_float_value': 200}]
-                errors = {1: {'mandatory_integer_value': ['Missing data for required field.']}}
+                received_data = [{'key 1': 'value 1', 'key 2': 1}, {'key 1': 'value 2', 'key 2': 2}]
+                errors = {
+                    0: {'a field': ['an error 1.']},
+                    1: {'a field': ['an error 2.'], 'another_field': ['first error 2', 'second error 2']},
+                }
                 raise validation.ValidationFailed(received_data, marshmallow_errors=errors)
 
         @api.route('/default_error')
@@ -122,13 +111,44 @@ class TestErrorHandling(JSONTestCase):
     def test_validation_failed_item(self):
         response = self.client.get('/validation_failed_item')
         self.assert400(response)
-        self.assert_json(response, {'fields': [
-            {'item': 1, 'field_name': 'mandatory_integer_value', 'messages': ['Missing data for required field.']}],
-            'message': "Errors: {'mandatory_integer_value': ['Missing data for required field.']}\nReceived: ({'optional_string_value': 'my_value1', 'mandatory_integer_value': 1, 'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23', 'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00', 'optional_float_value': 100}, {'optional_string_value': 'my_value2', 'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23', 'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00', 'optional_float_value': 200})"})
+        self.assert_json(response, {
+            'fields': [
+                {
+                    'item': 1,
+                    'field_name': 'a field',
+                    'messages': ['an error']
+                },
+                {
+                    'item': 1,
+                    'field_name': 'another_field',
+                    'messages': ['first error', 'second error']
+                },
+            ],
+            'message': "Errors: {'a field': ['an error'], 'another_field': ['first error', 'second error']}\n"
+                       "Received: {'key 1': 'value 1', 'key 2': 1}"
+        })
 
     def test_validation_failed_list(self):
         response = self.client.get('/validation_failed_list')
         self.assert400(response)
-        self.assert_json(response, {'fields': [
-            {'item': 2, 'field_name': 'mandatory_integer_value', 'messages': ['Missing data for required field.']}],
-            'message': "Errors: {1: {'mandatory_integer_value': ['Missing data for required field.']}}\nReceived: [{'optional_string_value': 'my_value1', 'mandatory_integer_value': 1, 'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23', 'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00', 'optional_float_value': 100}, {'optional_string_value': 'my_value2', 'optional_enum_value': 'First Enum Value', 'optional_date_value': '2017-10-23', 'optional_date_time_value': '2017-10-24T21:46:57.12458+00:00', 'optional_float_value': 200}]"})
+        self.assert_json(response, {
+            'fields': [
+                {
+                    'item': 1,
+                    'field_name': 'a field',
+                    'messages': ['an error 1.']
+                },
+                {
+                    'item': 2,
+                    'field_name': 'a field',
+                    'messages': ['an error 2.']
+                },
+                {
+                    'item': 2,
+                    'field_name': 'another_field',
+                    'messages': ['first error 2', 'second error 2']
+                },
+            ],
+            'message': "Errors: {0: {'a field': ['an error 1.']}, 1: {'a field': ['an error 2.'], 'another_field': ['first error 2', 'second error 2']}}\n"
+                       "Received: [{'key 1': 'value 1', 'key 2': 1}, {'key 1': 'value 2', 'key 2': 2}]"
+        })
