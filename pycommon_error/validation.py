@@ -80,19 +80,22 @@ def add_failed_validation_handler(api):
         """This is the default validation error handling."""
         logger.exception('Validation failed.')
         error_list = []
-        for field, messages in failed_validation.errors.items():
-            item = 1
-            field_name = field
-            if isinstance(messages, dict):
-                key, value = next(iter(messages.items()))
-                field_name = key
-                item = field + 1
-                messages = value
-            error_list.append({
-                'item': item,
-                'field_name': field_name,
-                'messages': messages,
-            })
+        for field_name_or_index, messages_or_fields in failed_validation.errors.items():
+            if isinstance(messages_or_fields, dict):
+                error_list.extend([
+                    {
+                        'item':  field_name_or_index + 1,
+                        'field_name': field_name,
+                        'messages': messages,
+                    }
+                    for field_name, messages in messages_or_fields.items()
+                ])
+            else:
+                error_list.append({
+                    'item': 1,
+                    'field_name': field_name_or_index,
+                    'messages': messages_or_fields,
+                })
         return {'fields': error_list}, 400
 
     return 400, 'Validation failed.', exception_model
