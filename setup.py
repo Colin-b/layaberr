@@ -19,12 +19,14 @@ setup(
     ]),
     install_requires=[
         # Used to manage fields
-        'flask-restplus==0.11.0',
+        'flask-restplus==0.12.1',
     ],
     extras_require={
         'testing': [
-            'nose',
-            'pycommon-test==1.9.1',
+            # Used to run tests
+            'nose==1.3.7',
+            # Used to provide testing help
+            'pycommon-test==1.10.2',
         ]
     },
 )
