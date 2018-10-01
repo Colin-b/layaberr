@@ -26,7 +26,7 @@ setup(
             # Used to run tests
             'nose==1.3.7',
             # Used to provide testing help
-            'pycommon-test==1.10.1',
+            'pycommon-test==1.10.2',
         ]
     },
 )
