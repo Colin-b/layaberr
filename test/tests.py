@@ -4,7 +4,7 @@ import sys
 from flask import Flask
 from flask_restplus import Resource, Api
 from pycommon_test.service_tester import JSONTestCase
-from werkzeug.exceptions import Unauthorized, BadRequest
+from werkzeug.exceptions import Unauthorized, BadRequest, Forbidden
 
 from pycommon_error import validation, authorization, default
 
@@ -26,6 +26,7 @@ class TestErrorHandling(JSONTestCase):
 
         bad_request_response = validation.add_bad_request_exception_handler(api)
         unauthorized_response = authorization.add_unauthorized_exception_handler(api)
+        forbidden_response = authorization.add_forbidden_exception_handler(api)
         model_not_found_response = validation.add_model_could_not_be_found_handler(api)
         validation_failed_response = validation.add_failed_validation_handler(api)
         default_response = default.add_exception_handler(api)
@@ -36,6 +37,13 @@ class TestErrorHandling(JSONTestCase):
             @api.response(*default_response)
             def get(self):
                 raise Unauthorized
+
+        @api.route('/forbidden')
+        class ForbiddenError(Resource):
+            @api.response(*forbidden_response)
+            @api.response(*default_response)
+            def get(self):
+                raise Forbidden
 
         @api.route('/bad_request')
         class BadRequestError(Resource):
@@ -90,6 +98,12 @@ class TestErrorHandling(JSONTestCase):
         self.assert401(response)
         self.assert_json(response, {
             'message': "401 Unauthorized: The server could not verify that you are authorized to access the URL requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required."})
+
+    def test_forbidden(self):
+        response = self.client.get('/forbidden')
+        self.assert403(response)
+        self.assert_json(response, {
+            'message': "403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server."})
 
     def test_bad_request(self):
         response = self.client.get('/bad_request')

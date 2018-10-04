@@ -6,23 +6,29 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 1.2.0 (2018-10-04) ##
+
+### Enhancements ###
+
+- Provide handler for Forbidden exception.
+
 ## Version 1.1.2 (2018-10-01) ##
 
 ### Bug fixes ###
 
-- Update dependencies to latest version
+- Update dependencies to latest version.
 
 ## Version 1.1.1 (2018-08-30) ##
 
 ### Bug fixes ###
 
-- Only the first issue per index (in case of a list of dictionaries) was sent back after ValidationFailed
+- Only the first issue per index (in case of a list of dictionaries) was sent back after ValidationFailed.
 
 ## Version 1.1.0 (2018-08-23) ##
 
 ### Enhancements ###
 
-- Add handler for Bad Request
+- Add handler for Bad Request.
 
 ## Version 1.0.0 (2018-08-20) ##
 
