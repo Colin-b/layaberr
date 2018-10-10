@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 1.3.0 (2018-10-10) ##
+
+### Enhancements ###
+
+- Add a new add_error_handlers function subscribing all error handlers and returning responses.
+
 ## Version 1.2.0 (2018-10-04) ##
 
 ### Enhancements ###

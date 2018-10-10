@@ -2,8 +2,6 @@ import os
 
 from setuptools import setup, find_packages
 
-from pycommon_error._version import __version__
-
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
 with open(os.path.join(this_dir, 'README.md'), 'r') as f:
@@ -11,7 +9,7 @@ with open(os.path.join(this_dir, 'README.md'), 'r') as f:
 
 setup(
     name='pycommon_error',
-    version=__version__,
+    version=open("pycommon_error/_version.py").readlines()[-1].split()[-1].strip("\"'"),
     description="Thin wrapper for pycommon-database and pycommon-server error handling",
     long_description=long_description,
     packages=find_packages(exclude=[
