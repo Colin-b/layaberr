@@ -67,7 +67,7 @@ class TestErrorHandling(JSONTestCase):
             def get(self):
                 received_data = {'key 1': 'value 1', 'key 2': 1}
                 errors = {'a field': ['an error'], 'another_field': ['first error', 'second error']}
-                raise validation.ValidationFailed(received_data, marshmallow_errors=errors)
+                raise validation.ValidationFailed(received_data, errors=errors)
 
         @api.route('/validation_failed_list')
         class ValidationFailedListError(Resource):
@@ -79,7 +79,7 @@ class TestErrorHandling(JSONTestCase):
                     0: {'a field': ['an error 1.']},
                     1: {'a field': ['an error 2.'], 'another_field': ['first error 2', 'second error 2']},
                 }
-                raise validation.ValidationFailed(received_data, marshmallow_errors=errors)
+                raise validation.ValidationFailed(received_data, errors=errors)
 
         @api.route('/default_error')
         class DefaultError(Resource):
