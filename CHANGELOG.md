@@ -6,6 +6,16 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 2.0.0 (2018-10-30) ##
+
+### Release notes ###
+
+- ValidationFailed parameter marshmallow_errors renamed into errors.
+
+### Bug fixes ###
+
+- Update dependencies to latest version.
+
 ## Version 1.3.0 (2018-10-10) ##
 
 ### Enhancements ###
