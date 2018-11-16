@@ -19,10 +19,8 @@ setup(
     ],
     extras_require={
         'testing': [
-            # Used to run tests
-            'nose==1.3.7',
             # Used to provide testing help
-            'pycommon-test==1.15.2',
+            'pycommon-test==2.1.0',
         ]
     },
 )
