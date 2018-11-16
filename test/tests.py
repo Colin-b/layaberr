@@ -97,13 +97,16 @@ class TestErrorHandling(JSONTestCase):
         response = self.client.get('/unauthorized')
         self.assert401(response)
         self.assert_json(response, {
-            'message': "401 Unauthorized: The server could not verify that you are authorized to access the URL requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required."})
+            'message': "401 Unauthorized: The server could not verify that you are authorized to access the URL "
+                       "requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser "
+                       "doesn't understand how to supply the credentials required."})
 
     def test_forbidden(self):
         response = self.client.get('/forbidden')
         self.assert403(response)
         self.assert_json(response, {
-            'message': "403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server."})
+            'message': "403 Forbidden: You don't have the permission to access the requested resource. It is either "
+                       "read-protected or not readable by the server."})
 
     def test_bad_request(self):
         response = self.client.get('/bad_request')
@@ -115,7 +118,8 @@ class TestErrorHandling(JSONTestCase):
         response = self.client.get('/model_not_found')
         self.assert404(response)
         self.assert_json(response, {
-            'message': 'Corresponding model could not be found. You have requested this URI [/model_not_found] but did you mean /model_not_found ?'})
+            'message': 'Corresponding model could not be found. You have requested this URI [/model_not_found] but '
+                       'did you mean /model_not_found ?'})
 
     def test_default(self):
         response = self.client.get('/default_error')
@@ -163,6 +167,7 @@ class TestErrorHandling(JSONTestCase):
                     'messages': ['first error 2', 'second error 2']
                 },
             ],
-            'message': "Errors: {0: {'a field': ['an error 1.']}, 1: {'a field': ['an error 2.'], 'another_field': ['first error 2', 'second error 2']}}\n"
+            'message': "Errors: {0: {'a field': ['an error 1.']}, 1: {'a field': ['an error 2.'], 'another_field': "
+                       "['first error 2', 'second error 2']}}\n"
                        "Received: [{'key 1': 'value 1', 'key 2': 1}, {'key 1': 'value 2', 'key 2': 2}]"
         })
