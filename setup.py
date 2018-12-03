@@ -22,7 +22,7 @@ setup(
     extras_require={
         'testing': [
             # Used to provide testing help
-            'pycommon-test==3.4.1',
+            'pycommon-test==4.0.0',
         ]
     },
 )
