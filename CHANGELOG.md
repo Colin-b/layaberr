@@ -6,6 +6,12 @@ List all changes in various categories:
 * Bug fixes
 * Known issues
 
+## Version 2.9.0 (2018-12-12) ##
+
+### Enhancements ###
+
+- Update dependencies to latest version (pycommon_test 4.4.0).
+
 ## Version 2.8.0 (2018-12-12) ##
 
 ### Enhancements ###
