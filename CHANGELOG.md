@@ -1,4 +1,4 @@
-# Python Common Database Changelog #
+# Python Common Error Changelog #
 
 List all changes in various categories:
 * Release notes: Contains all worth noting changes (breaking changes mainly)
