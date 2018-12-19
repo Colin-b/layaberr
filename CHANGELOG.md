@@ -1,10 +1,16 @@
-# Python Common Database Changelog #
+# Python Common Error Changelog #
 
 List all changes in various categories:
 * Release notes: Contains all worth noting changes (breaking changes mainly)
 * Enhancements
 * Bug fixes
 * Known issues
+
+## Version 2.13.0 (2018-12-19) ##
+
+### Enhancements ###
+
+- Update dependencies to latest version (pycommon_test 4.8.0).
 
 ## Version 2.12.0 (2018-12-14) ##
 
