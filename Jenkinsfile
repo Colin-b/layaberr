@@ -1,3 +1,3 @@
 @Library('jenkins-lib') _
 
-pythonModulePipeline('pycommon_error', 50)
+pythonModulePipeline('pycommon_error', 92)
