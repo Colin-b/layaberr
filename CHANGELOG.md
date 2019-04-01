@@ -5,80 +5,80 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Update pycommon_test to version 5.2.0
 
 ## [2.17.0] - 2019-02-22
-### Added
-- Update dependencies to latest version (pycommon_test 5.1.0).
+### Changed
+- Update pycommon_test to version 5.1.0
 
 ## [2.16.0] - 2019-01-25
-### Added
-- Update dependencies to latest version (pycommon_test 5.0.0).
+### Changed
+- Update pycommon_test to version 5.0.0
 
 ## [2.15.0] - 2019-01-10
-### Added
-- Update dependencies to latest version (pycommon_test 4.10.0).
+### Changed
+- Update pycommon_test to version 4.10.0
 
 ## [2.14.0] - 2019-01-09
-### Added
-- Update dependencies to latest version (pycommon_test 4.9.0).
+### Changed
+- Update pycommon_test to version 4.9.0
 
 ## [2.13.0] - 2018-12-19
-### Added
-- Update dependencies to latest version (pycommon_test 4.8.0).
+### Changed
+- Update pycommon_test to version 4.8.0
 
 ## [2.12.0] - 2018-12-14
-### Added
-- Update dependencies to latest version (pycommon_test 4.7.0).
+### Changed
+- Update pycommon_test to version 4.7.0
 
 ## [2.11.0] - 2018-12-14
-### Added
-- Update dependencies to latest version (pycommon_test 4.6.0).
+### Changed
+- Update pycommon_test to version 4.6.0
 
 ## [2.10.0] - 2018-12-13
-### Added
-- Update dependencies to latest version (pycommon_test 4.5.0).
+### Changed
+- Update pycommon_test to version 4.5.0
 
 ## [2.9.0] - 2018-12-12
-### Added
-- Update dependencies to latest version (pycommon_test 4.4.0).
+### Changed
+- Update pycommon_test to version 4.4.0
 
 ## [2.8.0] - 2018-12-12
-### Added
-- Update dependencies to latest version (pycommon_test 4.3.0).
+### Changed
+- Update pycommon_test to version 4.3.0
 
 ## [2.7.0] - 2018-12-04
-### Added
-- Update dependencies to latest version (pycommon_test 4.1.0).
+### Changed
+- Update pycommon_test to version 4.1.0
 
 ## [2.6.0] - 2018-12-03
-### Added
-- Update dependencies to latest version (pycommon_test 4.0.0).
+### Changed
+- Update pycommon_test to version 4.0.0
 
 ## [2.5.0] - 2018-11-30
-### Added
+### Changed
 - Update dependencies to latest version.
 
 ## [2.4.0] - 2018-11-29
-### Added
+### Changed
 - Update dependencies to latest version.
 
 ## [2.3.0] - 2018-11-28
-### Added
+### Changed
 - Update dependencies to latest version.
 
 ## [2.2.0] - 2018-11-26
-### Added
+### Changed
 - Update dependencies to latest version.
 
 ## [2.1.0] - 2018-11-16
-### Added
+### Changed
 - Update dependencies to latest version.
 
 ## [2.0.0] - 2018-10-30
 ### Changed
 - ValidationFailed parameter marshmallow_errors renamed into errors.
-
-### Fixed
 - Update dependencies to latest version.
 
 ## [1.3.0] - 2018-10-10
@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Provide handler for Forbidden exception.
 
 ## [1.1.2] - 2018-10-01
-### Fixed
+### Changed
 - Update dependencies to latest version.
 
 ## [1.1.1] - 2018-08-30
@@ -102,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add handler for Bad Request.
 
 ## [1.0.0] - 2018-08-20
-### Changed
+### Added
 - Initial release.
 
 [Unreleased]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.17.0...HEAD
