@@ -2,26 +2,26 @@
 
 <p align="center">
 <a href="https://github.com/ambv/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/pycommon-error/job/master/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/pycommon-error/master'></a>
+<a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/pycommon_error/job/master/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/pycommon_error/master'></a>
 </p>
 
 Thin wrapper for handling exceptions.
 
-The module is used to handle exception raised in pycommon-database and pycommon-server.
+The module is used to handle exception raised in pycommon_database and pycommon_server.
 
 ### Usage ###
 
-## pycommon-database ##
+## pycommon_database ##
 
 Use to wrap marshalling exceptions.
 
 | HTTP code | Parameter           | Description                                    |
 |:----------|:--------------------|:-----------------------------------------------|
-| 400       | `validation_failed` | Raised in case of validation error |
+| 400       | `validation_failed` | Raised in case of validation error             |
 | 404       | `model_not_found`   | Raised in case of missing data                 |
 
 
-## pycommon-server ##
+## pycommon_server ##
 
 Use to wrap flask-restplus exceptions.
 
