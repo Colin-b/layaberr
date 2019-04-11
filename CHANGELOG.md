@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.18.0] - 2019-03-11
+### Added
+- version is now a public file.
+
 ### Changed
-- Update pycommon_test to version 5.2.0
+- Update pycommon_test to version 5.3.0
 
 ## [2.17.0] - 2019-02-22
 ### Changed
@@ -105,7 +110,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.17.0...HEAD
+[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.18.0...HEAD
+[2.18.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.14.0...v2.15.0
