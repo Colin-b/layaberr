@@ -1,6 +1,7 @@
 import os
 
 from setuptools import setup, find_packages
+from pycommon_error.version import __version__
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -9,7 +10,7 @@ with open(os.path.join(this_dir, "README.md"), "r") as f:
 
 setup(
     name="pycommon_error",
-    version=open("pycommon_error/version.py").readlines()[-1].split()[-1].strip("\"'"),
+    version=__version__,
     description="Thin wrapper for pycommon-database and pycommon-server error handling",
     long_description=long_description,
     packages=find_packages(exclude=["test"]),
@@ -20,7 +21,7 @@ setup(
     extras_require={
         "testing": [
             # Used to provide testing help
-            "pycommon-test==5.3.0"
+            "pycommon-test==6.0.0"
         ]
     },
 )

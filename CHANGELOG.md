@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.19.0] - 2019-05-08
+### Added
+- Add a contributing doc.
+
+### Changed
+- Update pycommon_test to version 6.0.0
+- Send deployment notification to Slack ETRM #corps_pycommon channel
+
 ## [2.18.0] - 2019-03-11
 ### Added
 - version is now a public file.
