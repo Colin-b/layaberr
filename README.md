@@ -30,16 +30,3 @@ Use to wrap flask-restplus exceptions.
 | 400       | `bad_request_exception`  | Raised in case the server cannot interpret the request |
 | 401       | `unauthorized_exception` | Raised in case of unauthorized access                  |
 | 500       | `default_exception`      | Default handler (Internal Server Error)                |
-
-Contributing
-------------
-
-Everyone is free to contribute on this project.
-
-Before creating an issue please make sure that it was not already reported.
-
-Project follow "Black" code formatting: https://black.readthedocs.io/en/stable/
-
-To integrate it within Pycharm: https://black.readthedocs.io/en/stable/editor_integration.html#pycharm
-
-To add the pre-commit hook, after the installation run: **pre-commit install**
