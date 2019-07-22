@@ -105,8 +105,8 @@ def app():
     return application
 
 
-def test_unauthorized(self):
-    response = self.client.get("/unauthorized")
+def test_unauthorized(client):
+    response = client.get("/unauthorized")
     assert response.status_code == 401
     assert response.json == {
         "message": "401 Unauthorized: The server could not verify that you are authorized to access the URL "
@@ -115,8 +115,8 @@ def test_unauthorized(self):
     }
 
 
-def test_forbidden(self):
-    response = self.client.get("/forbidden")
+def test_forbidden(client):
+    response = client.get("/forbidden")
     assert response.status_code == 403
     assert response.json == {
         "message": "403 Forbidden: You don't have the permission to access the requested resource. It is either "
@@ -124,16 +124,16 @@ def test_forbidden(self):
     }
 
 
-def test_bad_request(self):
-    response = self.client.get("/bad_request")
+def test_bad_request(client):
+    response = client.get("/bad_request")
     assert response.status_code == 400
     assert response.json == {
         "message": "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
     }
 
 
-def test_model_not_found(self):
-    response = self.client.get("/model_not_found")
+def test_model_not_found(client):
+    response = client.get("/model_not_found")
     assert response.status_code == 404
     assert response.json == {
         "message": "Corresponding model could not be found. You have requested this URI [/model_not_found] but "
@@ -141,14 +141,14 @@ def test_model_not_found(self):
     }
 
 
-def test_default(self):
-    response = self.client.get("/default_error")
+def test_default(client):
+    response = client.get("/default_error")
     assert response.status_code == 500
     assert response.json == {"message": ""}
 
 
-def test_validation_failed_item(self):
-    response = self.client.get("/validation_failed_item")
+def test_validation_failed_item(client):
+    response = client.get("/validation_failed_item")
     assert response.status_code == 400
     assert response.json == {
         "fields": [
