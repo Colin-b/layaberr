@@ -12,56 +12,36 @@ def app():
     application.testing = True
     api = Api(application)
 
-    bad_request_response = pycommon_error.validation.add_bad_request_exception_handler(
-        api
-    )
-    unauthorized_response = pycommon_error.authorization.add_unauthorized_exception_handler(
-        api
-    )
-    forbidden_response = pycommon_error.authorization.add_forbidden_exception_handler(
-        api
-    )
-    model_not_found_response = pycommon_error.validation.add_model_could_not_be_found_handler(
-        api
-    )
-    validation_failed_response = pycommon_error.validation.add_failed_validation_handler(
-        api
-    )
-    default_response = pycommon_error.default.add_exception_handler(api)
+    error_responses = pycommon_error.add_error_handlers(api)
 
     @api.route("/unauthorized")
+    @api.doc(**error_responses)
     class UnauthorizedError(Resource):
-        @api.response(*unauthorized_response)
-        @api.response(*default_response)
         def get(self):
             raise Unauthorized
 
     @api.route("/forbidden")
+    @api.doc(**error_responses)
     class ForbiddenError(Resource):
-        @api.response(*forbidden_response)
-        @api.response(*default_response)
         def get(self):
             raise Forbidden
 
     @api.route("/bad_request")
+    @api.doc(**error_responses)
     class BadRequestError(Resource):
-        @api.response(*bad_request_response)
-        @api.response(*default_response)
         def get(self):
             raise BadRequest
 
     @api.route("/model_not_found")
+    @api.doc(**error_responses)
     class ModelNotFoundError(Resource):
-        @api.response(*model_not_found_response)
-        @api.response(*default_response)
         def get(self):
             row = {"value": "my_value1"}
             raise pycommon_error.validation.ModelCouldNotBeFound(row)
 
     @api.route("/validation_failed_item")
+    @api.doc(**error_responses)
     class ValidationFailedItemError(Resource):
-        @api.response(*validation_failed_response)
-        @api.response(*default_response)
         def get(self):
             received_data = {"key 1": "value 1", "key 2": 1}
             errors = {
@@ -73,9 +53,8 @@ def app():
             )
 
     @api.route("/validation_failed_list")
+    @api.doc(**error_responses)
     class ValidationFailedListError(Resource):
-        @api.response(*validation_failed_response)
-        @api.response(*default_response)
         def get(self):
             received_data = [
                 {"key 1": "value 1", "key 2": 1},
@@ -93,12 +72,8 @@ def app():
             )
 
     @api.route("/default_error")
+    @api.doc(**error_responses)
     class DefaultError(Resource):
-        @api.response(*bad_request_response)
-        @api.response(*validation_failed_response)
-        @api.response(*model_not_found_response)
-        @api.response(*unauthorized_response)
-        @api.response(*default_response)
         def get(self):
             raise Exception
 

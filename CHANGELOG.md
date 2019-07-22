@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.20.0] - 2019-07-22
+### Changed
+- Switched testing from pycommon_test to pytest-flask 0.15.0.
+- Increase coverage to 100%
+- Expose version within root
+
 ## [2.19.0] - 2019-05-08
 ### Added
 - Add a contributing doc.
@@ -118,7 +124,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.18.0...HEAD
+[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.20.0...HEAD
+[2.20.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.19.0...v2.20.0
+[2.19.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.18.0...v2.19.0
 [2.18.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.tools.digital.engie.com/GEM-Py/pycommon-server/compare/v2.15.0...v2.16.0
