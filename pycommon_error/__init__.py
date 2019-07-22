@@ -1,9 +1,7 @@
 from typing import Dict
 
-try:
-    from pycommon_error import validation, authorization, default
-except ModuleNotFoundError:
-    pass
+from pycommon_error.version import __version__
+from pycommon_error import validation, authorization, default
 
 
 def add_error_handlers(api) -> Dict[str, dict]:
