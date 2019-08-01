@@ -3,7 +3,7 @@ from flask import Flask
 from flask_restplus import Resource, Api
 from werkzeug.exceptions import Unauthorized, BadRequest, Forbidden
 
-import pycommon_error
+import layaberr
 
 
 @pytest.fixture
@@ -12,22 +12,22 @@ def app():
     application.testing = True
     api = Api(application)
 
-    bad_request_response = pycommon_error.validation.add_bad_request_exception_handler(
+    bad_request_response = layaberr.validation.add_bad_request_exception_handler(
         api
     )
-    unauthorized_response = pycommon_error.authorization.add_unauthorized_exception_handler(
+    unauthorized_response = layaberr.authorization.add_unauthorized_exception_handler(
         api
     )
-    forbidden_response = pycommon_error.authorization.add_forbidden_exception_handler(
+    forbidden_response = layaberr.authorization.add_forbidden_exception_handler(
         api
     )
-    model_not_found_response = pycommon_error.validation.add_model_could_not_be_found_handler(
+    model_not_found_response = layaberr.validation.add_model_could_not_be_found_handler(
         api
     )
-    validation_failed_response = pycommon_error.validation.add_failed_validation_handler(
+    validation_failed_response = layaberr.validation.add_failed_validation_handler(
         api
     )
-    default_response = pycommon_error.default.add_exception_handler(api)
+    default_response = layaberr.default.add_exception_handler(api)
 
     @api.route("/unauthorized")
     class UnauthorizedError(Resource):
@@ -56,7 +56,7 @@ def app():
         @api.response(*default_response)
         def get(self):
             row = {"value": "my_value1"}
-            raise pycommon_error.validation.ModelCouldNotBeFound(row)
+            raise layaberr.validation.ModelCouldNotBeFound(row)
 
     @api.route("/validation_failed_item")
     class ValidationFailedItemError(Resource):
@@ -68,7 +68,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise pycommon_error.validation.ValidationFailed(
+            raise layaberr.validation.ValidationFailed(
                 received_data, errors=errors
             )
 
@@ -88,7 +88,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise pycommon_error.validation.ValidationFailed(
+            raise layaberr.validation.ValidationFailed(
                 received_data, errors=errors
             )
 

@@ -8,9 +8,9 @@ with open(os.path.join(this_dir, "README.md"), "r") as f:
     long_description = f.read()
 
 setup(
-    name="pycommon_error",
-    version=open("pycommon_error/version.py").readlines()[-1].split()[-1].strip("\"'"),
-    description="Thin wrapper for pycommon_database and pycommon_server error handling",
+    name="layaberr",
+    version=open("layaberr/version.py").readlines()[-1].split()[-1].strip("\"'"),
+    description="Thin wrapper for layabase and layab error handling",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["test"]),
@@ -26,8 +26,8 @@ setup(
     },
     python_requires=">=3.6",
     project_urls={
-        "Changelog": "https://github.tools.digital.engie.com/GEM-Py/pycommon_error/blob/development/CHANGELOG.md",
-        "Issues": "https://github.tools.digital.engie.com/GEM-Py/pycommon_error/issues",
+        "Changelog": "https://github.tools.digital.engie.com/GEM-Py/layaberr/blob/development/CHANGELOG.md",
+        "Issues": "https://github.tools.digital.engie.com/GEM-Py/layaberr/issues",
     },
     license="MIT",
     classifiers=[

@@ -3,7 +3,7 @@ from flask import Flask
 from flask_restplus import Resource, Api
 from werkzeug.exceptions import Unauthorized, BadRequest, Forbidden
 
-import pycommon_error
+import layaberr
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def app():
     application.testing = True
     api = Api(application)
 
-    error_responses = pycommon_error.add_error_handlers(api)
+    error_responses = layaberr.add_error_handlers(api)
 
     @api.route("/unauthorized")
     @api.doc(**error_responses)
@@ -37,7 +37,7 @@ def app():
     class ModelNotFoundError(Resource):
         def get(self):
             row = {"value": "my_value1"}
-            raise pycommon_error.validation.ModelCouldNotBeFound(row)
+            raise layaberr.validation.ModelCouldNotBeFound(row)
 
     @api.route("/validation_failed_item")
     @api.doc(**error_responses)
@@ -48,7 +48,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise pycommon_error.validation.ValidationFailed(
+            raise layaberr.validation.ValidationFailed(
                 received_data, errors=errors
             )
 
@@ -67,7 +67,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise pycommon_error.validation.ValidationFailed(
+            raise layaberr.validation.ValidationFailed(
                 received_data, errors=errors
             )
 
