@@ -32,3 +32,10 @@ Use to wrap flask-restplus exceptions.
 | 400       | `bad_request_exception`  | Raised in case the server cannot interpret the request |
 | 401       | `unauthorized_exception` | Raised in case of unauthorized access                  |
 | 500       | `default_exception`      | Default handler (Internal Server Error)                |
+
+## How to install
+1. [python 3.7+](https://www.python.org/downloads/) must be installed
+2. Use pip to install module:
+```sh
+python -m pip install layaberr -i https://all-team-remote:tBa%40W%29tvB%5E%3C%3B2Jm3@artifactory.tools.digital.engie.com/artifactory/api/pypi/all-team-pypi-prod/simple
+```
