@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update CONTRIBUTING documentation to explain how to install pre-commit module using pip.
 - Update flask-restplus to version 0.13.0
+- Do not expose sub modules and expose ValidationFailed and ModelCouldNotBeFound exceptions.
 
 ## [1.0.0] - 2019-08-01
 ### Added
