@@ -10,6 +10,7 @@ import layaberr
 def app():
     application = Flask(__name__)
     application.testing = True
+    application.config["PROPAGATE_EXCEPTIONS"] = False
     api = Api(application)
 
     error_responses = layaberr.add_error_handlers(api)

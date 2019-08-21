@@ -10,6 +10,7 @@ import layaberr
 def app():
     application = Flask(__name__)
     application.testing = True
+    application.config["PROPAGATE_EXCEPTIONS"] = False
     api = Api(application)
 
     bad_request_response = layaberr.validation.add_bad_request_exception_handler(
