@@ -6,16 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2019-09-21
+## [2.0.0] - 2019-09-21
 ### Changed
 - Update CONTRIBUTING documentation to explain how to install pre-commit module using pip.
 - Update flask-restplus to version 0.13.0
-- Do not expose sub modules and expose ValidationFailed and ModelCouldNotBeFound exceptions.
+- Do not expose sub modules.
+- ValidationFailed is now available via layaberr.ValidationFailed.
+- ModelCouldNotBeFound is now available via layaberr.ModelCouldNotBeFound.
 
 ## [1.0.0] - 2019-08-01
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v1.1.0...HEAD
-[1.1.0]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v1.0.0...v1.1.0
+[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v2.0.0...HEAD
+[2.0.0]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.tools.digital.engie.com/GEM-Py/layaberr/releases/tag/v1.0.0

@@ -38,7 +38,7 @@ def app():
     class ModelNotFoundError(Resource):
         def get(self):
             row = {"value": "my_value1"}
-            raise layaberr.validation.ModelCouldNotBeFound(row)
+            raise layaberr.ModelCouldNotBeFound(row)
 
     @api.route("/validation_failed_item")
     @api.doc(**error_responses)
@@ -49,7 +49,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise layaberr.validation.ValidationFailed(
+            raise layaberr.ValidationFailed(
                 received_data, errors=errors
             )
 
@@ -68,7 +68,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise layaberr.validation.ValidationFailed(
+            raise layaberr.ValidationFailed(
                 received_data, errors=errors
             )
 

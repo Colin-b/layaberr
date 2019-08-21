@@ -1,17 +1,18 @@
 from typing import Dict
 
 from layaberr.version import __version__
-from layaberr import _validation, _authorization, _default
-from layaberr._validation import ValidationFailed, ModelCouldNotBeFound
+from layaberr._validation import ValidationFailed, ModelCouldNotBeFound, add_bad_request_exception_handler, add_failed_validation_handler, add_model_could_not_be_found_handler
+from layaberr._authorization import add_unauthorized_exception_handler, add_forbidden_exception_handler
+from layaberr._default import add_exception_handler
 
 
 def add_error_handlers(api) -> Dict[str, dict]:
-    bad_request = _validation.add_bad_request_exception_handler(api)
-    failed_validation = _validation.add_failed_validation_handler(api)
-    model_could_not_be_found = _validation.add_model_could_not_be_found_handler(api)
-    unauthorized = _authorization.add_unauthorized_exception_handler(api)
-    forbidden = _authorization.add_forbidden_exception_handler(api)
-    exception = _default.add_exception_handler(api)
+    bad_request = add_bad_request_exception_handler(api)
+    failed_validation = add_failed_validation_handler(api)
+    model_could_not_be_found = add_model_could_not_be_found_handler(api)
+    unauthorized = add_unauthorized_exception_handler(api)
+    forbidden = add_forbidden_exception_handler(api)
+    exception = add_exception_handler(api)
 
     return {
         "responses": {

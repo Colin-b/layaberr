@@ -8,7 +8,9 @@
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/lastSuccessfulBuild/testReport/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=testCount'></a>
 </p>
 
-To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add layaberr error handlers to your API and endpoints.
+To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add error handler(s) to your API and endpoints.
+
+## Add all handlers at once
 
 ```python
 from flask_restplus import Resource
@@ -24,13 +26,31 @@ class YourFlaskRestPlusResource(Resource):
         return "test"
 ```
 
+## Add some handlers
+
+```python
+from flask_restplus import Resource
+import layaberr
+
+api = None # Your flask-restplus API instance
+error_response = layaberr.add_failed_validation_handler(api)
+
+@api.route("/your_endpoint")
+class YourFlaskRestPlusResource(Resource):
+    @api.response(error_response)
+    def get(self):
+        return "test"
+```
+
+## Supported Exceptions
+
 The following exceptions are handled:
 
-## ValidationFailed
+### ValidationFailed
 
 In case your endpoint raises ValidationFailed, an HTTP error 400 (Bad Request) will be sent to the client.
 
-### Error not specific to a field in received data
+#### Error not specific to a field in received data
 
 This code:
 
@@ -46,7 +66,7 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  1, "field_name":  "", "messages": ["This is the error message"]}]}
 ```
 
-### Error specific to a field in a received dictionary
+#### Error specific to a field in a received dictionary
 
 This code:
 
@@ -62,7 +82,7 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  1, "field_name":  "field 1", "messages": ["Invalid value"]}]}
 ```
 
-### Error specific to a field in a received list of dictionaries
+#### Error specific to a field in a received list of dictionaries
 
 This code:
 
@@ -78,7 +98,7 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  2, "field_name":  "field 1", "messages": ["Invalid value"]}]}
 ```
 
-## ModelCouldNotBeFound
+### ModelCouldNotBeFound
 
 In case your endpoint raises ModelCouldNotBeFound, an HTTP error 404 (Not Found) will be sent to the client.
 
@@ -96,7 +116,7 @@ Will result in the following JSON response sent to the client:
 {"message":  "Corresponding model could not be found."}
 ```
 
-## BadRequest
+### BadRequest
 
 In case your endpoint raises BadRequest, an HTTP error 400 (Bad Request) will be sent to the client.
 
@@ -113,7 +133,7 @@ Will result in the following JSON response sent to the client:
 {"message":  "The exception message"}
 ```
 
-## Unauthorized
+### Unauthorized
 
 In case your endpoint raises Unauthorized, an HTTP error 401 (Unauthorized) will be sent to the client.
 
@@ -130,7 +150,7 @@ Will result in the following JSON response sent to the client:
 {"message":  "The exception message"}
 ```
 
-## Forbidden
+### Forbidden
 
 In case your endpoint raises Forbidden, an HTTP error 403 (Forbidden) will be sent to the client.
 
@@ -147,7 +167,7 @@ Will result in the following JSON response sent to the client:
 {"message":  "The exception message"}
 ```
 
-## Exception (this is the default handler)
+### Exception (this is the default handler)
 
 In case your endpoint raises an Exception, an HTTP error 500 (Internal Server Error) will be sent to the client.
 
