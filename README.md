@@ -1,15 +1,16 @@
 <h2 align="center">Exceptions handling for layab</h2>
 
 <p align="center">
-<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href='https://github.tools.digital.engie.com/GEM-Py/layaberr/releases/latest'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=version'></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master'></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/cobertura/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=testCoverage'></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/lastSuccessfulBuild/testReport/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=testCount'></a>
 </p>
 
 Thin wrapper for handling exceptions.
 
-The module is used to handle exception raised in layabase and layab.
+The module is used to handle exception raised in layabase and projects using layab.
 
 ### Usage ###
 
