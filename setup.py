@@ -16,7 +16,7 @@ setup(
     packages=find_packages(exclude=["test"]),
     install_requires=[
         # Used to manage fields
-        "flask-restplus==0.12.1"
+        "flask-restplus==0.13.0"
     ],
     extras_require={
         "testing": [

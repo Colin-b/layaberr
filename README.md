@@ -1,37 +1,186 @@
 <h2 align="center">Exceptions handling for layab</h2>
 
 <p align="center">
-<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href='https://github.tools.digital.engie.com/GEM-Py/layaberr/releases/latest'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=version'></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master'></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/cobertura/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=testCoverage'></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 <a href='https://pse.tools.digital.engie.com/drm-all.gem/job/team/view/Python%20modules/job/layaberr/job/master/lastSuccessfulBuild/testReport/'><img src='https://pse.tools.digital.engie.com/drm-all.gem/buildStatus/icon?job=team/layaberr/master&config=testCount'></a>
 </p>
 
-Thin wrapper for handling exceptions.
+To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add error handler(s) to your API and endpoints.
 
-The module is used to handle exception raised in layabase and layab.
+## Add all handlers at once
 
-### Usage ###
+```python
+from flask_restplus import Resource
+import layaberr
 
-## layabase ##
+api = None # Your flask-restplus API instance
+error_responses = layaberr.add_error_handlers(api)
 
-Use to wrap marshalling exceptions.
+@api.route("/your_endpoint")
+@api.doc(**error_responses)
+class YourFlaskRestPlusResource(Resource):
+    def get(self):
+        return "test"
+```
 
-| HTTP code | Parameter           | Description                                    |
-|:----------|:--------------------|:-----------------------------------------------|
-| 400       | `validation_failed` | Raised in case of validation error             |
-| 404       | `model_not_found`   | Raised in case of missing data                 |
+## Add some handlers
 
+```python
+from flask_restplus import Resource
+import layaberr
 
-## layab ##
+api = None # Your flask-restplus API instance
+error_response = layaberr.add_failed_validation_handler(api)
 
-Use to wrap flask-restplus exceptions.
+@api.route("/your_endpoint")
+class YourFlaskRestPlusResource(Resource):
+    @api.response(error_response)
+    def get(self):
+        return "test"
+```
 
-| HTTP code | Parameter                | Description                                            |
-|:----------|:-------------------------|:-------------------------------------------------------|
-| 400       | `bad_request_exception`  | Raised in case the server cannot interpret the request |
-| 401       | `unauthorized_exception` | Raised in case of unauthorized access                  |
-| 500       | `default_exception`      | Default handler (Internal Server Error)                |
+## Supported Exceptions
+
+The following exceptions are handled:
+
+### ValidationFailed
+
+In case your endpoint raises ValidationFailed, an HTTP error 400 (Bad Request) will be sent to the client.
+
+#### Error not specific to a field in received data
+
+This code:
+
+```python
+from layaberr import ValidationFailed
+
+received_data = None
+raise ValidationFailed(received_data, message="This is the error message")
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"fields":  [{"item":  1, "field_name":  "", "messages": ["This is the error message"]}]}
+```
+
+#### Error specific to a field in a received dictionary
+
+This code:
+
+```python
+from layaberr import ValidationFailed
+
+received_data = {"field 1": "value 1"}
+raise ValidationFailed(received_data, errors={"field 1": ["Invalid value"]})
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"fields":  [{"item":  1, "field_name":  "field 1", "messages": ["Invalid value"]}]}
+```
+
+#### Error specific to a field in a received list of dictionaries
+
+This code:
+
+```python
+from layaberr import ValidationFailed
+
+received_data = [{"field 1": "value 1"}, {"field 1": "value 2"}]
+raise ValidationFailed(received_data, errors={1: {"field 1": ["Invalid value"]}})
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"fields":  [{"item":  2, "field_name":  "field 1", "messages": ["Invalid value"]}]}
+```
+
+### ModelCouldNotBeFound
+
+In case your endpoint raises ModelCouldNotBeFound, an HTTP error 404 (Not Found) will be sent to the client.
+
+This code:
+
+```python
+from layaberr import ModelCouldNotBeFound
+
+requested_data = None
+raise ModelCouldNotBeFound(requested_data)
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"message":  "Corresponding model could not be found."}
+```
+
+### BadRequest
+
+In case your endpoint raises BadRequest, an HTTP error 400 (Bad Request) will be sent to the client.
+
+This code:
+
+```python
+from werkzeug.exceptions import BadRequest
+
+raise BadRequest("The exception message")
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"message":  "The exception message"}
+```
+
+### Unauthorized
+
+In case your endpoint raises Unauthorized, an HTTP error 401 (Unauthorized) will be sent to the client.
+
+This code:
+
+```python
+from werkzeug.exceptions import Unauthorized
+
+raise Unauthorized("The exception message")
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"message":  "The exception message"}
+```
+
+### Forbidden
+
+In case your endpoint raises Forbidden, an HTTP error 403 (Forbidden) will be sent to the client.
+
+This code:
+
+```python
+from werkzeug.exceptions import Forbidden
+
+raise Forbidden("The exception message")
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"message":  "The exception message"}
+```
+
+### Exception (this is the default handler)
+
+In case your endpoint raises an Exception, an HTTP error 500 (Internal Server Error) will be sent to the client.
+
+This code:
+
+```python
+raise Exception("The exception message")
+```
+
+Will result in the following JSON response sent to the client:
+```json
+{"message":  "The exception message"}
+```
 
 ## How to install
 1. [python 3.7+](https://www.python.org/downloads/) must be installed
