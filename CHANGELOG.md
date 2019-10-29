@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2019-10-29
+### Changed
+- Do not use fixed first level dependencies.
+
 ## [2.0.0] - 2019-09-21
 ### Changed
 - Update CONTRIBUTING documentation to explain how to install pre-commit module using pip.
@@ -18,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v2.0.0...HEAD
-[2.0.0]: https://github.tools.digital.engie.com/GEM-Py/layaberr/compare/v1.0.0...v2.0.0
-[1.0.0]: https://github.tools.digital.engie.com/GEM-Py/layaberr/releases/tag/v1.0.0
+[Unreleased]: https://github.tools.digital.engie.com/gempy/layaberr/compare/v2.1.0...HEAD
+[2.1.0]: https://github.tools.digital.engie.com/gempy/layaberr/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.tools.digital.engie.com/gempy/layaberr/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.tools.digital.engie.com/gempy/layaberr/releases/tag/v1.0.0

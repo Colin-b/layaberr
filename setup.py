@@ -16,18 +16,18 @@ setup(
     packages=find_packages(exclude=["test"]),
     install_requires=[
         # Used to manage fields
-        "flask-restplus==0.13.0"
+        "flask-restplus==0.13.*"
     ],
     extras_require={
         "testing": [
             # Used to manage testing of a Flask application
-            "pytest-flask==0.15.0"
+            "pytest-flask==0.15.*"
         ]
     },
     python_requires=">=3.6",
     project_urls={
-        "Changelog": "https://github.tools.digital.engie.com/GEM-Py/layaberr/blob/development/CHANGELOG.md",
-        "Issues": "https://github.tools.digital.engie.com/GEM-Py/layaberr/issues",
+        "Changelog": "https://github.tools.digital.engie.com/gempy/layaberr/blob/master/CHANGELOG.md",
+        "Issues": "https://github.tools.digital.engie.com/gempy/layaberr/issues",
     },
     license="MIT",
     classifiers=[
@@ -39,6 +39,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Build Tools",
     ],
     keywords=["error", "rest", "flask"],
