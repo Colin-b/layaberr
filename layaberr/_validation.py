@@ -6,6 +6,18 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
+class ModelCouldNotBeFound(HTTPException):
+    """Corresponding model could not be found."""
+
+    def __init__(self, requested_data):
+        HTTPException.__init__(
+            self,
+            status_code=HTTPStatus.NOT_FOUND.value,
+            detail="Corresponding model could not be found.",
+        )
+        self.requested_data = requested_data
+
+
 DictErrors = Dict[str, List[str]]
 ListErrors = Dict[int, DictErrors]
 
@@ -86,30 +98,3 @@ async def validation_failed_exception(request: Request, exc: ValidationFailed):
                 }
             )
     return JSONResponse({"fields": error_list}, status_code=exc.status_code)
-
-
-class ModelCouldNotBeFound(HTTPException):
-    """Corresponding model could not be found."""
-
-    def __init__(self, requested_data):
-        HTTPException.__init__(self, status_code=HTTPStatus.NOT_FOUND.value)
-        self.requested_data = requested_data
-
-
-async def model_could_not_be_found_exception(
-    request: Request, exc: ModelCouldNotBeFound
-):
-    """
-    required:
-        - message
-    properties:
-        message:
-            type: string
-            description: Description of the error.
-            example: Corresponding model could not be found.
-    type: object
-    """
-    return JSONResponse(
-        {"message": "Corresponding model could not be found."},
-        status_code=exc.status_code,
-    )
