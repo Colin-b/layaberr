@@ -2,50 +2,31 @@
 
 <p align="center">
 <a href="https://pypi.org/project/layaberr/"><img alt="pypi version" src="https://img.shields.io/pypi/v/layaberr"></a>
-<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/layaberr.svg?branch=develop"></a>
+<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/layaberr.svg?branch=master"></a>
 <a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-brightgreen"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-14 passed-blue"></a>
+<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-11 passed-blue"></a>
 <a href="https://pypi.org/project/layaberr/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/layaberr"></a>
 </p>
 
-To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add error handler(s) to your API and endpoints.
+To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add exception handler(s) to your Starlette API.
 
-## Add all handlers at once
+## Register exceptions handlers
 
-```python
-from flask_restplus import Resource
-import layaberr
+If you want to document your API about those specific return types and the expected body, you can use [layab](https://pypi.org/project/layab/) to create your Starlette application.
 
-api = None # Your flask-restplus API instance
-error_responses = layaberr.add_error_handlers(api)
-
-@api.route("/your_endpoint")
-@api.doc(**error_responses)
-class YourFlaskRestPlusResource(Resource):
-    def get(self):
-        return "test"
-```
-
-## Add some handlers
+You can also register all provided exceptions at once yourself using `layaberr.exception_handlers`
 
 ```python
-from flask_restplus import Resource
+from starlette.applications import Starlette
 import layaberr
 
-api = None # Your flask-restplus API instance
-error_response = layaberr.add_failed_validation_handler(api)
-
-@api.route("/your_endpoint")
-class YourFlaskRestPlusResource(Resource):
-    @api.response(error_response)
-    def get(self):
-        return "test"
+app = Starlette(exception_handlers=layaberr.exception_handlers)
 ```
 
 ## Supported Exceptions
 
-The following exceptions are handled:
+The following exceptions are available
 
 ### ValidationFailed
 
@@ -117,23 +98,6 @@ Will result in the following JSON response sent to the client:
 {"message":  "Corresponding model could not be found."}
 ```
 
-### BadRequest
-
-In case your endpoint raises BadRequest, an HTTP error 400 (Bad Request) will be sent to the client.
-
-This code:
-
-```python
-from werkzeug.exceptions import BadRequest
-
-raise BadRequest("The exception message")
-```
-
-Will result in the following JSON response sent to the client:
-```json
-{"message":  "The exception message"}
-```
-
 ### Unauthorized
 
 In case your endpoint raises Unauthorized, an HTTP error 401 (Unauthorized) will be sent to the client.
@@ -141,7 +105,7 @@ In case your endpoint raises Unauthorized, an HTTP error 401 (Unauthorized) will
 This code:
 
 ```python
-from werkzeug.exceptions import Unauthorized
+from layaberr import Unauthorized
 
 raise Unauthorized("The exception message")
 ```
@@ -158,7 +122,7 @@ In case your endpoint raises Forbidden, an HTTP error 403 (Forbidden) will be se
 This code:
 
 ```python
-from werkzeug.exceptions import Forbidden
+from layaberr import Forbidden
 
 raise Forbidden("The exception message")
 ```

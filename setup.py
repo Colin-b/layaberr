@@ -32,16 +32,16 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Build Tools",
     ],
-    keywords=["error", "rest", "flask"],
+    keywords=["error", "rest", "asgi", "starlette"],
     packages=find_packages(exclude=["tests*"]),
     install_requires=[
-        # Used to manage fields
-        "flask-restplus==0.13.*"
+        # Used for base exception
+        "starlette==0.13.*"
     ],
     extras_require={
         "testing": [
-            # Used to manage testing of a Flask application
-            "pytest-flask==0.15.*",
+            # Used to manage testing of a Starlette application
+            "requests==2.*",
             # Used to check coverage
             "pytest-cov==2.*",
         ]

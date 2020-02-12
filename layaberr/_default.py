@@ -1,39 +1,31 @@
-import logging
-from http import HTTPStatus
-
-from flask_restplus import fields
-
-logger = logging.getLogger(__name__)
+from starlette.exceptions import HTTPException
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 
-def _exception_model(api):
-    exception_details = {
-        "message": fields.String(
-            description="Description of the error.",
-            required=True,
-            example="This is a description of the error.",
-        )
-    }
-    return api.model("Exception", exception_details)
-
-
-def add_exception_handler(api):
+async def http_exception(request: Request, exc: HTTPException):
     """
-    Add the default Exception handler.
-
-    :param api: The root Api
+    required:
+        - message
+    properties:
+        message:
+            type: string
+            description: Description of the error.
+            example: This is a description of the error.
+    type: object
     """
-    exception_model = _exception_model(api)
+    return JSONResponse({"message": exc.detail}, status_code=exc.status_code)
 
-    @api.errorhandler(Exception)
-    @api.marshal_with(exception_model, code=HTTPStatus.INTERNAL_SERVER_ERROR)
-    def handle_exception(exception):
-        """This is the default error handling."""
-        logger.exception("An unexpected error occurred.")
-        return {"message": str(exception)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    return (
-        HTTPStatus.INTERNAL_SERVER_ERROR,
-        "An unexpected error occurred.",
-        exception_model,
-    )
+async def exception(request: Request, exc: Exception):
+    """
+    required:
+        - message
+    properties:
+        message:
+            type: string
+            description: Description of the error.
+            example: This is a description of the error.
+    type: object
+    """
+    return JSONResponse({"message": str(exc)}, status_code=500)
