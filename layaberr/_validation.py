@@ -6,15 +6,6 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 
-class BadRequest(HTTPException):
-    def __init__(self, detail: str = ""):
-        HTTPException.__init__(
-            self,
-            status_code=HTTPStatus.BAD_REQUEST.value,
-            detail=detail or HTTPStatus.BAD_REQUEST.description,
-        )
-
-
 DictErrors = Dict[str, List[str]]
 ListErrors = Dict[int, DictErrors]
 
