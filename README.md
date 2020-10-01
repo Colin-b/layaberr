@@ -9,9 +9,13 @@
 <a href="https://pypi.org/project/layaberr/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/layaberr"></a>
 </p>
 
-To be able to throw exceptions in your code and send a proper HTTP response automatically to your client your need to add exception handler(s) to your Starlette API.
+This module allows to throw exceptions in your code and send a proper HTTP response automatically to your client.
 
-## Register exceptions handlers
+Depending on the REST Framework you use, your need to add exception handler(s) to your API.
+
+## Starlette
+
+### Register exceptions handlers
 
 If you want to document your API about those specific return types and the expected body, you can use [layab](https://pypi.org/project/layab/) to create your Starlette application.
 
@@ -19,25 +23,25 @@ You can also register all provided exceptions at once yourself using `layaberr.e
 
 ```python
 from starlette.applications import Starlette
-import layaberr
+import layaberr.starlette
 
-app = Starlette(exception_handlers=layaberr.exception_handlers)
+app = Starlette(exception_handlers=layaberr.starlette.exception_handlers)
 ```
 
-## Supported Exceptions
+### Supported Exceptions
 
 The following exceptions are available
 
-### ValidationFailed
+#### ValidationFailed
 
 In case your endpoint raises ValidationFailed, an HTTP error 400 (Bad Request) will be sent to the client.
 
-#### Error not specific to a field in received data
+##### Error not specific to a field in received data
 
 This code:
 
 ```python
-from layaberr import ValidationFailed
+from layaberr.starlette import ValidationFailed
 
 received_data = None
 raise ValidationFailed(received_data, message="This is the error message")
@@ -48,12 +52,12 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  1, "field_name":  "", "messages": ["This is the error message"]}]}
 ```
 
-#### Error specific to a field in a received dictionary
+##### Error specific to a field in a received dictionary
 
 This code:
 
 ```python
-from layaberr import ValidationFailed
+from layaberr.starlette import ValidationFailed
 
 received_data = {"field 1": "value 1"}
 raise ValidationFailed(received_data, errors={"field 1": ["Invalid value"]})
@@ -64,12 +68,12 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  1, "field_name":  "field 1", "messages": ["Invalid value"]}]}
 ```
 
-#### Error specific to a field in a received list of dictionaries
+##### Error specific to a field in a received list of dictionaries
 
 This code:
 
 ```python
-from layaberr import ValidationFailed
+from layaberr.starlette import ValidationFailed
 
 received_data = [{"field 1": "value 1"}, {"field 1": "value 2"}]
 raise ValidationFailed(received_data, errors={1: {"field 1": ["Invalid value"]}})
@@ -80,32 +84,14 @@ Will result in the following JSON response sent to the client:
 {"fields":  [{"item":  2, "field_name":  "field 1", "messages": ["Invalid value"]}]}
 ```
 
-### ModelCouldNotBeFound
-
-In case your endpoint raises ModelCouldNotBeFound, an HTTP error 404 (Not Found) will be sent to the client.
-
-This code:
-
-```python
-from layaberr import ModelCouldNotBeFound
-
-requested_data = None
-raise ModelCouldNotBeFound(requested_data)
-```
-
-Will result in the following JSON response sent to the client:
-```json
-{"message":  "Corresponding model could not be found."}
-```
-
-### Unauthorized
+#### Unauthorized
 
 In case your endpoint raises Unauthorized, an HTTP error 401 (Unauthorized) will be sent to the client.
 
 This code:
 
 ```python
-from layaberr import Unauthorized
+from layaberr.starlette import Unauthorized
 
 raise Unauthorized("The exception message")
 ```
@@ -115,14 +101,14 @@ Will result in the following JSON response sent to the client:
 {"message":  "The exception message"}
 ```
 
-### Forbidden
+#### Forbidden
 
 In case your endpoint raises Forbidden, an HTTP error 403 (Forbidden) will be sent to the client.
 
 This code:
 
 ```python
-from layaberr import Forbidden
+from layaberr.starlette import Forbidden
 
 raise Forbidden("The exception message")
 ```
@@ -132,7 +118,7 @@ Will result in the following JSON response sent to the client:
 {"message":  "The exception message"}
 ```
 
-### Exception (this is the default handler)
+#### Exception (this is the default handler)
 
 In case your endpoint raises an Exception, an HTTP error 500 (Internal Server Error) will be sent to the client.
 

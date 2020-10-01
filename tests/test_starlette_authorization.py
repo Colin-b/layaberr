@@ -2,7 +2,7 @@ import pytest
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
 
-import layaberr
+import layaberr.starlette
 
 
 @pytest.fixture
@@ -11,19 +11,19 @@ def client():
 
     @app.route("/unauthorized")
     def unauthorized(request):
-        raise layaberr.Unauthorized
+        raise layaberr.starlette.Unauthorized
 
     @app.route("/unauthorized_detail")
     def unauthorized(request):
-        raise layaberr.Unauthorized(detail="Error message")
+        raise layaberr.starlette.Unauthorized(detail="Error message")
 
     @app.route("/forbidden")
     def forbidden(request):
-        raise layaberr.Forbidden
+        raise layaberr.starlette.Forbidden
 
     @app.route("/forbidden_detail")
     def unauthorized(request):
-        raise layaberr.Forbidden(detail="Error message")
+        raise layaberr.starlette.Forbidden(detail="Error message")
 
     return TestClient(app, raise_server_exceptions=False)
 

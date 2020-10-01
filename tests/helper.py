@@ -75,7 +75,7 @@ class StarlettePlugin(BasePlugin):
 
 
 def client():
-    app = Starlette(exception_handlers=layaberr.exception_handlers)
+    app = Starlette(exception_handlers=layaberr.starlette.exception_handlers)
 
     plugin = StarlettePlugin(app)
     spec = APISpec(

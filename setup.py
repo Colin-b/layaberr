@@ -34,13 +34,11 @@ setup(
     ],
     keywords=["error", "rest", "asgi", "starlette"],
     packages=find_packages(exclude=["tests*"]),
-    install_requires=[
-        # Used for base exception
-        "starlette==0.13.*"
-    ],
+    install_requires=[],
     extras_require={
         "testing": [
             # Used to manage testing of a Starlette application
+            "starlette==0.13.*",
             "requests==2.*",
             # Used to check coverage
             "pytest-cov==2.*",

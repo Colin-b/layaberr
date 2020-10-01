@@ -3,12 +3,12 @@ from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.testclient import TestClient
 
-import layaberr
+import layaberr.starlette
 
 
 @pytest.fixture
 def client():
-    app = Starlette(exception_handlers=layaberr.exception_handlers)
+    app = Starlette(exception_handlers=layaberr.starlette.exception_handlers)
 
     @app.route("/bad_request")
     def bad_request(request):

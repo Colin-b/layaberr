@@ -2,17 +2,12 @@ import pytest
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
 
-import layaberr
+import layaberr.starlette
 
 
 @pytest.fixture
 def client():
-    app = Starlette(exception_handlers=layaberr.exception_handlers)
-
-    @app.route("/model_not_found")
-    def model_not_found(request):
-        row = {"value": "my_value1"}
-        raise layaberr.ModelCouldNotBeFound(row)
+    app = Starlette(exception_handlers=layaberr.starlette.exception_handlers)
 
     @app.route("/validation_failed_item")
     def validation_failed_item(request):
@@ -21,7 +16,7 @@ def client():
             "a field": ["an error"],
             "another_field": ["first error", "second error"],
         }
-        raise layaberr.ValidationFailed(received_data, errors=errors)
+        raise layaberr.starlette.ValidationFailed(received_data, errors=errors)
 
     @app.route("/validation_failed_list")
     def validation_failed_list(request):
@@ -36,19 +31,13 @@ def client():
                 "another_field": ["first error 2", "second error 2"],
             },
         }
-        raise layaberr.ValidationFailed(received_data, errors=errors)
+        raise layaberr.starlette.ValidationFailed(received_data, errors=errors)
 
     @app.route("/validation_failed_message")
     def validation_failed_list(request):
-        raise layaberr.ValidationFailed({}, message="Error message")
+        raise layaberr.starlette.ValidationFailed({}, message="Error message")
 
     return TestClient(app, raise_server_exceptions=False)
-
-
-def test_model_not_found(client):
-    response = client.get("/model_not_found")
-    assert response.status_code == 404
-    assert response.json() == {"message": "Corresponding model could not be found."}
 
 
 def test_validation_failed_item(client):
