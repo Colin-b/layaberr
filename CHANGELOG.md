@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All [Flask-RestPlus](https://flask-restplus.readthedocs.io/en/stable/) exceptions and handlers have been removed.
 
 ### Added
-- `layaberr.starlette` module providing [Starlette](https://www.starlette.io) exceptions and handlers.
+- Add `layaberr.starlette` module providing [Starlette](https://www.starlette.io) exceptions and handlers.
+- Add `layaberr.flask_restx` module to retrieve the equivalent of all `flask-restplus` provided exception and handlers.
 
 ## [2.2.0] - 2019-12-02
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/Colin-b/layaberr/compare/v3.0.0...HEAD
-[3.0.0]: https://github.com/Colin-b/layaberr/compare/v2.2.0...v3.0.0
+[Unreleased]: https://github.com/Colin-b/layaberr/compare/v2.2.0...HEAD
 [2.2.0]: https://github.com/Colin-b/layaberr/releases/tag/v2.2.0
