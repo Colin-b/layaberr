@@ -2,10 +2,10 @@
 
 <p align="center">
 <a href="https://pypi.org/project/layaberr/"><img alt="pypi version" src="https://img.shields.io/pypi/v/layaberr"></a>
-<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Build status" src="https://api.travis-ci.org/Colin-b/layaberr.svg?branch=master"></a>
-<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-brightgreen"></a>
+<a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Build status" src="https://api.travis-ci.com/Colin-b/layaberr.svg?branch=master"></a>
+<a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-brightgreen"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://travis-ci.org/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-11 passed-blue"></a>
+<a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-11 passed-blue"></a>
 <a href="https://pypi.org/project/layaberr/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/layaberr"></a>
 </p>
 
@@ -19,7 +19,7 @@ Depending on the REST Framework you use, your need to add exception handler(s) t
 
 If you want to document your API about those specific return types and the expected body, you can use [layab](https://pypi.org/project/layab/) to create your Starlette application.
 
-You can also register all provided exceptions at once yourself using `layaberr.exception_handlers`
+You can also register all provided exceptions at once yourself using `layaberr.starlette.exception_handlers`
 
 ```python
 from starlette.applications import Starlette

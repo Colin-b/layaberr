@@ -7,7 +7,7 @@ import layaberr.starlette
 
 @pytest.fixture
 def client():
-    app = Starlette(exception_handlers=layaberr.exception_handlers)
+    app = Starlette(exception_handlers=layaberr.starlette.exception_handlers)
 
     @app.route("/unauthorized")
     def unauthorized(request):
