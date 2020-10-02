@@ -49,9 +49,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise layaberr.flask_restx.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/validation_failed_list")
     @api.doc(**error_responses)
@@ -68,9 +66,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise layaberr.flask_restx.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/default_error")
     @api.doc(**error_responses)

@@ -13,21 +13,13 @@ def app():
     application.config["PROPAGATE_EXCEPTIONS"] = False
     api = Api(application)
 
-    bad_request_response = layaberr.flask_restx.add_bad_request_exception_handler(
-        api
+    bad_request_response = layaberr.flask_restx.add_bad_request_exception_handler(api)
+    unauthorized_response = layaberr.flask_restx.add_unauthorized_exception_handler(api)
+    forbidden_response = layaberr.flask_restx.add_forbidden_exception_handler(api)
+    model_not_found_response = (
+        layaberr.flask_restx.add_model_could_not_be_found_handler(api)
     )
-    unauthorized_response = layaberr.flask_restx.add_unauthorized_exception_handler(
-        api
-    )
-    forbidden_response = layaberr.flask_restx.add_forbidden_exception_handler(
-        api
-    )
-    model_not_found_response = layaberr.flask_restx.add_model_could_not_be_found_handler(
-        api
-    )
-    validation_failed_response = layaberr.flask_restx.add_failed_validation_handler(
-        api
-    )
+    validation_failed_response = layaberr.flask_restx.add_failed_validation_handler(api)
     default_response = layaberr.flask_restx.add_exception_handler(api)
 
     @api.route("/unauthorized")
@@ -69,9 +61,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise layaberr.flask_restx.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/validation_failed_list")
     class ValidationFailedListError(Resource):
@@ -89,9 +79,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise layaberr.flask_restx.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/default_error")
     class DefaultError(Resource):
