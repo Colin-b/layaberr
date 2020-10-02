@@ -41,6 +41,7 @@ setup(
     extras_require={
         "testing": [
             # Used to manage testing of a Flask application
+            "flask-restx==0.2.*"
             "pytest-flask==0.15.*",
             # Used to check coverage
             "pytest-cov==2.*",
