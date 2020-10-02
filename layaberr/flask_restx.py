@@ -211,44 +211,9 @@ def add_failed_validation_handler(api):
     return 400, "Validation failed.", exception_model
 
 
-class ModelCouldNotBeFound(Exception):
-    def __init__(self, requested_data):
-        self.requested_data = requested_data
-
-
-def _model_could_not_be_found_model(api):
-    exception_details = {
-        "message": fields.String(
-            description="Description of the error.",
-            required=True,
-            example="Corresponding model could not be found.",
-        )
-    }
-    return api.model("ModelCouldNotBeFound", exception_details)
-
-
-def add_model_could_not_be_found_handler(api):
-    """
-    Add the default ModelCouldNotBeFound handler.
-
-    :param api: The root Api
-    """
-    exception_model = _model_could_not_be_found_model(api)
-
-    @api.errorhandler(ModelCouldNotBeFound)
-    @api.marshal_with(exception_model, code=404)
-    def handle_exception(model_could_not_be_found):
-        """This is the default model could not be found handling."""
-        logger.exception("Corresponding model could not be found.")
-        return {"message": "Corresponding model could not be found."}, 404
-
-    return 404, "Corresponding model could not be found.", exception_model
-
-
 def add_error_handlers(api) -> Dict[str, dict]:
     bad_request = add_bad_request_exception_handler(api)
     failed_validation = add_failed_validation_handler(api)
-    model_could_not_be_found = add_model_could_not_be_found_handler(api)
     unauthorized = add_unauthorized_exception_handler(api)
     forbidden = add_forbidden_exception_handler(api)
     exception = add_exception_handler(api)
@@ -257,10 +222,6 @@ def add_error_handlers(api) -> Dict[str, dict]:
         "responses": {
             bad_request[0].value: (bad_request[1], bad_request[2]),
             failed_validation[0]: (failed_validation[1], failed_validation[2]),
-            model_could_not_be_found[0]: (
-                model_could_not_be_found[1],
-                model_could_not_be_found[2],
-            ),
             unauthorized[0].value: (unauthorized[1], unauthorized[2]),
             forbidden[0].value: (forbidden[1], forbidden[2]),
             exception[0].value: (exception[1], exception[2]),

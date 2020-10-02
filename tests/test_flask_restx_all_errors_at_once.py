@@ -33,13 +33,6 @@ def app():
         def get(self):
             raise BadRequest
 
-    @api.route("/model_not_found")
-    @api.doc(**error_responses)
-    class ModelNotFoundError(Resource):
-        def get(self):
-            row = {"value": "my_value1"}
-            raise layaberr.flask_restx.ModelCouldNotBeFound(row)
-
     @api.route("/validation_failed_item")
     @api.doc(**error_responses)
     class ValidationFailedItemError(Resource):
@@ -101,15 +94,6 @@ def test_bad_request(client):
     assert response.status_code == 400
     assert response.json == {
         "message": "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
-    }
-
-
-def test_model_not_found(client):
-    response = client.get("/model_not_found")
-    assert response.status_code == 404
-    assert response.json == {
-        "message": "Corresponding model could not be found. You have requested this URI [/model_not_found] but "
-        "did you mean /model_not_found ?"
     }
 
 
