@@ -1,11 +1,92 @@
+from typing import Union, List, Dict
 import logging
 from http import HTTPStatus
-from typing import Union, List, Dict
 
-from flask_restplus import fields
-from werkzeug.exceptions import BadRequest
+from flask_restx import fields
+from werkzeug.exceptions import Unauthorized, Forbidden, BadRequest
+
 
 logger = logging.getLogger(__name__)
+
+
+def _unauthorized_exception_model(api):
+    exception_details = {
+        "message": fields.String(
+            description="Description of the error.",
+            required=True,
+            example="This is a description of the error.",
+        )
+    }
+    return api.model("Unauthorized", exception_details)
+
+
+def add_unauthorized_exception_handler(api):
+    """
+    Add the Unauthorized Exception handler.
+
+    :param api: The root Api
+    """
+    exception_model = _unauthorized_exception_model(api)
+
+    @api.errorhandler(Unauthorized)
+    @api.marshal_with(exception_model, code=HTTPStatus.UNAUTHORIZED)
+    def handle_exception(exception):
+        """This is the Unauthorized error handling."""
+        logger.exception(HTTPStatus.UNAUTHORIZED.description)
+        return {"message": str(exception)}, HTTPStatus.UNAUTHORIZED
+
+    return HTTPStatus.UNAUTHORIZED, HTTPStatus.UNAUTHORIZED.description, exception_model
+
+
+def add_forbidden_exception_handler(api):
+    """
+    Add the Forbidden Exception handler.
+
+    :param api: The root Api
+    """
+    exception_model = _unauthorized_exception_model(api)
+
+    @api.errorhandler(Forbidden)
+    @api.marshal_with(exception_model, code=HTTPStatus.FORBIDDEN)
+    def handle_exception(exception):
+        """This is the Forbidden error handling."""
+        logger.exception(HTTPStatus.FORBIDDEN.description)
+        return {"message": str(exception)}, HTTPStatus.FORBIDDEN
+
+    return HTTPStatus.FORBIDDEN, HTTPStatus.FORBIDDEN.description, exception_model
+
+
+def _exception_model(api):
+    exception_details = {
+        "message": fields.String(
+            description="Description of the error.",
+            required=True,
+            example="This is a description of the error.",
+        )
+    }
+    return api.model("Exception", exception_details)
+
+
+def add_exception_handler(api):
+    """
+    Add the default Exception handler.
+
+    :param api: The root Api
+    """
+    exception_model = _exception_model(api)
+
+    @api.errorhandler(Exception)
+    @api.marshal_with(exception_model, code=HTTPStatus.INTERNAL_SERVER_ERROR)
+    def handle_exception(exception):
+        """This is the default error handling."""
+        logger.exception("An unexpected error occurred.")
+        return {"message": str(exception)}, HTTPStatus.INTERNAL_SERVER_ERROR
+
+    return (
+        HTTPStatus.INTERNAL_SERVER_ERROR,
+        "An unexpected error occurred.",
+        exception_model,
+    )
 
 
 def _bad_request_exception_model(api):
@@ -130,35 +211,19 @@ def add_failed_validation_handler(api):
     return 400, "Validation failed.", exception_model
 
 
-class ModelCouldNotBeFound(Exception):
-    def __init__(self, requested_data):
-        self.requested_data = requested_data
+def add_error_handlers(api) -> Dict[str, dict]:
+    bad_request = add_bad_request_exception_handler(api)
+    failed_validation = add_failed_validation_handler(api)
+    unauthorized = add_unauthorized_exception_handler(api)
+    forbidden = add_forbidden_exception_handler(api)
+    exception = add_exception_handler(api)
 
-
-def _model_could_not_be_found_model(api):
-    exception_details = {
-        "message": fields.String(
-            description="Description of the error.",
-            required=True,
-            example="Corresponding model could not be found.",
-        )
+    return {
+        "responses": {
+            bad_request[0].value: (bad_request[1], bad_request[2]),
+            failed_validation[0]: (failed_validation[1], failed_validation[2]),
+            unauthorized[0].value: (unauthorized[1], unauthorized[2]),
+            forbidden[0].value: (forbidden[1], forbidden[2]),
+            exception[0].value: (exception[1], exception[2]),
+        }
     }
-    return api.model("ModelCouldNotBeFound", exception_details)
-
-
-def add_model_could_not_be_found_handler(api):
-    """
-    Add the default ModelCouldNotBeFound handler.
-
-    :param api: The root Api
-    """
-    exception_model = _model_could_not_be_found_model(api)
-
-    @api.errorhandler(ModelCouldNotBeFound)
-    @api.marshal_with(exception_model, code=404)
-    def handle_exception(model_could_not_be_found):
-        """This is the default model could not be found handling."""
-        logger.exception("Corresponding model could not be found.")
-        return {"message": "Corresponding model could not be found."}, 404
-
-    return 404, "Corresponding model could not be found.", exception_model

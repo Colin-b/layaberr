@@ -1,9 +1,9 @@
 import pytest
 from flask import Flask
-from flask_restplus import Resource, Api
+from flask_restx import Resource, Api
 from werkzeug.exceptions import Unauthorized, BadRequest, Forbidden
 
-import layaberr
+import layaberr.flask_restx
 
 
 @pytest.fixture
@@ -13,7 +13,7 @@ def app():
     application.config["PROPAGATE_EXCEPTIONS"] = False
     api = Api(application)
 
-    error_responses = layaberr.add_error_handlers(api)
+    error_responses = layaberr.flask_restx.add_error_handlers(api)
 
     @api.route("/unauthorized")
     @api.doc(**error_responses)
@@ -33,13 +33,6 @@ def app():
         def get(self):
             raise BadRequest
 
-    @api.route("/model_not_found")
-    @api.doc(**error_responses)
-    class ModelNotFoundError(Resource):
-        def get(self):
-            row = {"value": "my_value1"}
-            raise layaberr.ModelCouldNotBeFound(row)
-
     @api.route("/validation_failed_item")
     @api.doc(**error_responses)
     class ValidationFailedItemError(Resource):
@@ -49,9 +42,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise layaberr.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/validation_failed_list")
     @api.doc(**error_responses)
@@ -68,9 +59,7 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise layaberr.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/default_error")
     @api.doc(**error_responses)
@@ -105,15 +94,6 @@ def test_bad_request(client):
     assert response.status_code == 400
     assert response.json == {
         "message": "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
-    }
-
-
-def test_model_not_found(client):
-    response = client.get("/model_not_found")
-    assert response.status_code == 404
-    assert response.json == {
-        "message": "Corresponding model could not be found. You have requested this URI [/model_not_found] but "
-        "did you mean /model_not_found ?"
     }
 
 

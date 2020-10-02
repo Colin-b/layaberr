@@ -1,9 +1,9 @@
 import pytest
 from flask import Flask
-from flask_restplus import Resource, Api
+from flask_restx import Resource, Api
 from werkzeug.exceptions import Unauthorized, BadRequest, Forbidden
 
-import layaberr
+import layaberr.flask_restx
 
 
 @pytest.fixture
@@ -13,22 +13,11 @@ def app():
     application.config["PROPAGATE_EXCEPTIONS"] = False
     api = Api(application)
 
-    bad_request_response = layaberr.add_bad_request_exception_handler(
-        api
-    )
-    unauthorized_response = layaberr.add_unauthorized_exception_handler(
-        api
-    )
-    forbidden_response = layaberr.add_forbidden_exception_handler(
-        api
-    )
-    model_not_found_response = layaberr.add_model_could_not_be_found_handler(
-        api
-    )
-    validation_failed_response = layaberr.add_failed_validation_handler(
-        api
-    )
-    default_response = layaberr.add_exception_handler(api)
+    bad_request_response = layaberr.flask_restx.add_bad_request_exception_handler(api)
+    unauthorized_response = layaberr.flask_restx.add_unauthorized_exception_handler(api)
+    forbidden_response = layaberr.flask_restx.add_forbidden_exception_handler(api)
+    validation_failed_response = layaberr.flask_restx.add_failed_validation_handler(api)
+    default_response = layaberr.flask_restx.add_exception_handler(api)
 
     @api.route("/unauthorized")
     class UnauthorizedError(Resource):
@@ -51,14 +40,6 @@ def app():
         def get(self):
             raise BadRequest
 
-    @api.route("/model_not_found")
-    class ModelNotFoundError(Resource):
-        @api.response(*model_not_found_response)
-        @api.response(*default_response)
-        def get(self):
-            row = {"value": "my_value1"}
-            raise layaberr.ModelCouldNotBeFound(row)
-
     @api.route("/validation_failed_item")
     class ValidationFailedItemError(Resource):
         @api.response(*validation_failed_response)
@@ -69,9 +50,7 @@ def app():
                 "a field": ["an error"],
                 "another_field": ["first error", "second error"],
             }
-            raise layaberr.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/validation_failed_list")
     class ValidationFailedListError(Resource):
@@ -89,15 +68,12 @@ def app():
                     "another_field": ["first error 2", "second error 2"],
                 },
             }
-            raise layaberr.ValidationFailed(
-                received_data, errors=errors
-            )
+            raise layaberr.flask_restx.ValidationFailed(received_data, errors=errors)
 
     @api.route("/default_error")
     class DefaultError(Resource):
         @api.response(*bad_request_response)
         @api.response(*validation_failed_response)
-        @api.response(*model_not_found_response)
         @api.response(*unauthorized_response)
         @api.response(*default_response)
         def get(self):
@@ -130,15 +106,6 @@ def test_bad_request(client):
     assert response.status_code == 400
     assert response.json == {
         "message": "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
-    }
-
-
-def test_model_not_found(client):
-    response = client.get("/model_not_found")
-    assert response.status_code == 404
-    assert response.json == {
-        "message": "Corresponding model could not be found. You have requested this URI [/model_not_found] but "
-        "did you mean /model_not_found ?"
     }
 
 
