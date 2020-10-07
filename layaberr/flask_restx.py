@@ -138,7 +138,7 @@ def add_error_handlers(api: flask_restx.Api) -> Dict[str, dict]:
     :return: A dictionary that can be used to document those error handlers in flask_restx.
     As in @api.doc(**error_responses)
     """
-    bad_request = add_error_handler(api, BadRequest, http.HTTPStatus.BAD_REQUEST)
+    add_error_handler(api, BadRequest, http.HTTPStatus.BAD_REQUEST)
     failed_validation = add_failed_validation_handler(api)
     unauthorized = add_error_handler(api, Unauthorized, http.HTTPStatus.UNAUTHORIZED)
     forbidden = add_error_handler(api, Forbidden, http.HTTPStatus.FORBIDDEN)
@@ -146,7 +146,6 @@ def add_error_handlers(api: flask_restx.Api) -> Dict[str, dict]:
 
     return {
         "responses": {
-            bad_request[0]: (bad_request[1], bad_request[2]),
             failed_validation[0]: (failed_validation[1], failed_validation[2]),
             unauthorized[0]: (unauthorized[1], unauthorized[2]),
             forbidden[0]: (forbidden[1], forbidden[2]),
