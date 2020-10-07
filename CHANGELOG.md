@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.0.0.dev1] - 2020-10-07
 ### Added
 - Explicit support for Python 3.9
 - Added `layaberr.flask_restx.add_error_handler` function to return a string representation of an error as a specific HTTP error.
@@ -38,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/Colin-b/layaberr/compare/v3.0.0.dev0...HEAD
+[Unreleased]: https://github.com/Colin-b/layaberr/compare/v3.0.0.dev1...HEAD
+[3.0.0.dev1]: https://github.com/Colin-b/layaberr/compare/v3.0.0.dev0...v3.0.0.dev1
 [3.0.0.dev0]: https://github.com/Colin-b/layaberr/compare/v2.2.0...v3.0.0.dev0
 [2.2.0]: https://github.com/Colin-b/layaberr/releases/tag/v2.2.0
