@@ -11,6 +11,7 @@ def app():
     application = Flask(__name__)
     application.testing = True
     application.config["PROPAGATE_EXCEPTIONS"] = False
+    application.config["ERROR_INCLUDE_MESSAGE"] = False
     api = Api(application)
 
     error_responses = layaberr.flask_restx.add_error_handlers(api)
@@ -73,70 +74,61 @@ def app():
 def test_unauthorized(client):
     response = client.get("/unauthorized")
     assert response.status_code == 401
-    assert response.json == {
-        "message": "401 Unauthorized: The server could not verify that you are authorized to access the URL "
-        "requested. You either supplied the wrong credentials (e.g. a bad password), or your browser "
-        "doesn't understand how to supply the credentials required."
-    }
+    assert (
+        response.json
+        == "401 Unauthorized: The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required."
+    )
 
 
 def test_forbidden(client):
     response = client.get("/forbidden")
     assert response.status_code == 403
-    assert response.json == {
-        "message": "403 Forbidden: You don't have the permission to access the requested resource. It is either "
-        "read-protected or not readable by the server."
-    }
+    assert (
+        response.json
+        == "403 Forbidden: You don't have the permission to access the requested resource. It is either read-protected or not readable by the server."
+    )
 
 
 def test_bad_request(client):
     response = client.get("/bad_request")
     assert response.status_code == 400
-    assert response.json == {
-        "message": "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
-    }
+    assert (
+        response.json
+        == "400 Bad Request: The browser (or proxy) sent a request that this server could not understand."
+    )
 
 
 def test_default(client):
     response = client.get("/default_error")
     assert response.status_code == 500
-    assert response.json == {"message": ""}
+    assert response.json == ""
 
 
 def test_validation_failed_item(client):
     response = client.get("/validation_failed_item")
     assert response.status_code == 400
-    assert response.json == {
-        "fields": [
-            {"item": 1, "field_name": "a field", "messages": ["an error"]},
-            {
-                "item": 1,
-                "field_name": "another_field",
-                "messages": ["first error", "second error"],
-            },
-        ],
-        "message": "Errors: {'a field': ['an error'], 'another_field': ['first error', 'second error']}\n"
-        "Received: {'key 1': 'value 1', 'key 2': 1}",
-    }
+    assert response.json == [
+        {"item": 1, "field_name": "a field", "messages": ["an error"]},
+        {
+            "item": 1,
+            "field_name": "another_field",
+            "messages": ["first error", "second error"],
+        },
+    ]
 
 
 def test_validation_failed_list(client):
     response = client.get("/validation_failed_list")
     assert response.status_code == 400
-    assert response.json == {
-        "fields": [
-            {"item": 1, "field_name": "a field", "messages": ["an error 1."]},
-            {"item": 2, "field_name": "a field", "messages": ["an error 2."]},
-            {
-                "item": 2,
-                "field_name": "another_field",
-                "messages": ["first error 2", "second error 2"],
-            },
-        ],
-        "message": "Errors: {0: {'a field': ['an error 1.']}, 1: {'a field': ['an error 2.'], 'another_field': "
-        "['first error 2', 'second error 2']}}\n"
-        "Received: [{'key 1': 'value 1', 'key 2': 1}, {'key 1': 'value 2', 'key 2': 2}]",
-    }
+    assert response.json == [
+        {"item": 1, "field_name": "a field", "messages": ["an error 1."]},
+        {"item": 2, "field_name": "a field", "messages": ["an error 2."]},
+        {
+            "item": 2,
+            "field_name": "another_field",
+            "messages": ["first error 2", "second error 2"],
+        },
+    ]
 
 
 def test_open_api_definition(client):
@@ -150,19 +142,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_bad_request_error",
@@ -174,19 +169,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_default_error",
@@ -198,19 +196,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_forbidden_error",
@@ -222,19 +223,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_unauthorized_error",
@@ -246,19 +250,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_validation_failed_item_error",
@@ -270,19 +277,22 @@ def test_open_api_definition(client):
                     "responses": {
                         "400": {
                             "description": "Validation failed.",
-                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": "#/definitions/ValidationFailed"},
+                            },
                         },
                         "401": {
                             "description": "No permission -- see authorization schemes",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "403": {
                             "description": "Request forbidden -- authorization will not help",
-                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                            "schema": {"type": "string"},
                         },
                         "500": {
-                            "description": "An unexpected error occurred.",
-                            "schema": {"$ref": "#/definitions/Exception"},
+                            "description": "Server got itself in trouble",
+                            "schema": {"type": "string"},
                         },
                     },
                     "operationId": "get_validation_failed_list_error",
@@ -295,28 +305,7 @@ def test_open_api_definition(client):
         "consumes": ["application/json"],
         "tags": [{"name": "default", "description": "Default namespace"}],
         "definitions": {
-            "BadRequest": {
-                "required": ["message"],
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "description": "Description of the error.",
-                        "example": "This is a description of the error.",
-                    }
-                },
-                "type": "object",
-            },
             "ValidationFailed": {
-                "properties": {
-                    "fields": {
-                        "type": "array",
-                        "items": {"$ref": "#/definitions/FieldValidationFailed"},
-                    }
-                },
-                "type": "object",
-            },
-            "FieldValidationFailed": {
-                "required": ["field_name", "item"],
                 "properties": {
                     "item": {
                         "type": "integer",
@@ -338,52 +327,20 @@ def test_open_api_definition(client):
                     },
                 },
                 "type": "object",
-            },
-            "Unauthorized": {
-                "required": ["message"],
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "description": "Description of the error.",
-                        "example": "This is a description of the error.",
-                    }
-                },
-                "type": "object",
-            },
-            "Exception": {
-                "required": ["message"],
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "description": "Description of the error.",
-                        "example": "This is a description of the error.",
-                    }
-                },
-                "type": "object",
-            },
+            }
         },
         "responses": {
             "ParseError": {"description": "When a mask can't be parsed"},
             "MaskError": {"description": "When any error occurs on mask"},
-            "BadRequest": {
-                "description": "This is the Bad Request error handling",
-                "schema": {"$ref": "#/definitions/BadRequest"},
-            },
+            "BadRequest": {"schema": {"type": "string"}},
             "ValidationFailed": {
-                "description": "This is the default validation error handling",
-                "schema": {"$ref": "#/definitions/ValidationFailed"},
+                "schema": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/ValidationFailed"},
+                }
             },
-            "Unauthorized": {
-                "description": "This is the Unauthorized error handling",
-                "schema": {"$ref": "#/definitions/Unauthorized"},
-            },
-            "Forbidden": {
-                "description": "This is the Forbidden error handling",
-                "schema": {"$ref": "#/definitions/Unauthorized"},
-            },
-            "Exception": {
-                "description": "This is the default error handling",
-                "schema": {"$ref": "#/definitions/Exception"},
-            },
+            "Unauthorized": {"schema": {"type": "string"}},
+            "Forbidden": {"schema": {"type": "string"}},
+            "Exception": {"schema": {"type": "string"}},
         },
     }

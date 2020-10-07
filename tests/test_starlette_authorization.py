@@ -31,24 +31,22 @@ def client():
 def test_unauthorized(client):
     response = client.get("/unauthorized")
     assert response.status_code == 401
-    assert response.json() == {"message": "No permission -- see authorization schemes"}
+    assert response.json() == "No permission -- see authorization schemes"
 
 
 def test_unauthorized_detail(client):
     response = client.get("/unauthorized_detail")
     assert response.status_code == 401
-    assert response.json() == {"message": "Error message"}
+    assert response.json() == "Error message"
 
 
 def test_forbidden(client):
     response = client.get("/forbidden")
     assert response.status_code == 403
-    assert response.json() == {
-        "message": "Request forbidden -- authorization will not help"
-    }
+    assert response.json() == "Request forbidden -- authorization will not help"
 
 
 def test_forbidden_detail(client):
     response = client.get("/forbidden_detail")
     assert response.status_code == 403
-    assert response.json() == {"message": "Error message"}
+    assert response.json() == "Error message"

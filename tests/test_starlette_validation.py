@@ -43,37 +43,33 @@ def client():
 def test_validation_failed_item(client):
     response = client.get("/validation_failed_item")
     assert response.status_code == 400
-    assert response.json() == {
-        "fields": [
-            {"item": 1, "field_name": "a field", "messages": ["an error"]},
-            {
-                "item": 1,
-                "field_name": "another_field",
-                "messages": ["first error", "second error"],
-            },
-        ]
-    }
+    assert response.json() == [
+        {"item": 1, "field_name": "a field", "messages": ["an error"]},
+        {
+            "item": 1,
+            "field_name": "another_field",
+            "messages": ["first error", "second error"],
+        },
+    ]
 
 
 def test_validation_failed_list(client):
     response = client.get("/validation_failed_list")
     assert response.status_code == 400
-    assert response.json() == {
-        "fields": [
-            {"item": 1, "field_name": "a field", "messages": ["an error 1."]},
-            {"item": 2, "field_name": "a field", "messages": ["an error 2."]},
-            {
-                "item": 2,
-                "field_name": "another_field",
-                "messages": ["first error 2", "second error 2"],
-            },
-        ]
-    }
+    assert response.json() == [
+        {"item": 1, "field_name": "a field", "messages": ["an error 1."]},
+        {"item": 2, "field_name": "a field", "messages": ["an error 2."]},
+        {
+            "item": 2,
+            "field_name": "another_field",
+            "messages": ["first error 2", "second error 2"],
+        },
+    ]
 
 
 def test_validation_failed_message(client):
     response = client.get("/validation_failed_message")
     assert response.status_code == 400
-    assert response.json() == {
-        "fields": [{"field_name": "", "item": 1, "messages": ["Error message"]}]
-    }
+    assert response.json() == [
+        {"field_name": "", "item": 1, "messages": ["Error message"]}
+    ]

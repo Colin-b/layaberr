@@ -7,9 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Explicit support for Python 3.9
+- Added `layaberr.flask_restx.add_error_handler` function to return a string representation of an error as a specific HTTP error.
 
 ### Fixed
 - Add documentation to `layaberr.flask_restx.add_error_handlers`.
+
+### Changed
+- `layaberr.flask_restx.add_bad_request_exception_handler` will now raise a JSON string as a response. Instead of a JSON dict with the string value linked to `message` key.
+- `layaberr.flask_restx.add_unauthorized_exception_handler` will now raise a JSON string as a response. Instead of a JSON dict with the string value linked to `message` key.
+- `layaberr.flask_restx.add_forbidden_exception_handler` will now raise a JSON string as a response. Instead of a JSON dict with the string value linked to `message` key.
+- `layaberr.flask_restx.add_exception_handler` will now raise a JSON string as a response. Instead of a JSON dict with the string value linked to `message` key.
+- `layaberr.flask_restx.add_failed_validation_handler` will not contains `message` key anymore and the content of `fields` key will not be the JSON response. So a list is now returned instead of a dict containing a list.
+
+### Removed
+- `layaberr.flask_restx` will not log exceptions anymore. Logging is deferred to the REST API.
+- `layaberr.flask_restx.add_bad_request_exception_handler` is not available anymore.
+- `layaberr.flask_restx.add_unauthorized_exception_handler` is not available anymore.
+- `layaberr.flask_restx.add_forbidden_exception_handler` is not available anymore.
+- `layaberr.flask_restx.add_exception_handler` is not available anymore.
 
 ## [3.0.0.dev0] - 2020-10-02
 ### Removed
