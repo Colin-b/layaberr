@@ -29,7 +29,7 @@ def add_unauthorized_exception_handler(api: flask_restx.Api):
     exception_model = _unauthorized_exception_model(api)
 
     @api.errorhandler(Unauthorized)
-    @api.marshal_with(exception_model, code=HTTPStatus.UNAUTHORIZED)
+    @api.response(code=HTTPStatus.UNAUTHORIZED, description=None, model=exception_model)
     def handle_exception(exception):
         """This is the Unauthorized error handling."""
         logger.exception(HTTPStatus.UNAUTHORIZED.description)
@@ -47,7 +47,7 @@ def add_forbidden_exception_handler(api: flask_restx.Api):
     exception_model = _unauthorized_exception_model(api)
 
     @api.errorhandler(Forbidden)
-    @api.marshal_with(exception_model, code=HTTPStatus.FORBIDDEN)
+    @api.response(code=HTTPStatus.FORBIDDEN, description=None, model=exception_model)
     def handle_exception(exception):
         """This is the Forbidden error handling."""
         logger.exception(HTTPStatus.FORBIDDEN.description)
@@ -76,7 +76,9 @@ def add_exception_handler(api: flask_restx.Api):
     exception_model = _exception_model(api)
 
     @api.errorhandler(Exception)
-    @api.marshal_with(exception_model, code=HTTPStatus.INTERNAL_SERVER_ERROR)
+    @api.response(
+        code=HTTPStatus.INTERNAL_SERVER_ERROR, description=None, model=exception_model
+    )
     def handle_exception(exception):
         """This is the default error handling."""
         logger.exception("An unexpected error occurred.")
@@ -109,7 +111,7 @@ def add_bad_request_exception_handler(api: flask_restx.Api):
     exception_model = _bad_request_exception_model(api)
 
     @api.errorhandler(BadRequest)
-    @api.marshal_with(exception_model, code=HTTPStatus.BAD_REQUEST)
+    @api.response(code=HTTPStatus.BAD_REQUEST, description=None, model=exception_model)
     def handle_exception(exception):
         """This is the Bad Request error handling."""
         logger.exception(HTTPStatus.BAD_REQUEST.description)
@@ -183,7 +185,7 @@ def add_failed_validation_handler(api: flask_restx.Api):
     exception_model = _failed_validation_model(api)
 
     @api.errorhandler(ValidationFailed)
-    @api.marshal_with(exception_model, code=400)
+    @api.response(code=400, description=None, model=exception_model)
     def handle_exception(failed_validation):
         """This is the default validation error handling."""
         logger.exception("Validation failed.")
