@@ -5,7 +5,7 @@
 <a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Build status" src="https://api.travis-ci.com/Colin-b/layaberr.svg?branch=master"></a>
 <a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Coverage" src="https://img.shields.io/badge/coverage-100%25-brightgreen"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-<a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-22 passed-blue"></a>
+<a href="https://travis-ci.com/Colin-b/layaberr"><img alt="Number of tests" src="https://img.shields.io/badge/tests-24 passed-blue"></a>
 <a href="https://pypi.org/project/layaberr/"><img alt="Number of downloads" src="https://img.shields.io/pypi/dm/layaberr"></a>
 </p>
 
@@ -49,7 +49,7 @@ raise ValidationFailed(received_data, message="This is the error message")
 
 Will result in the following JSON response sent to the client:
 ```json
-{"fields":  [{"item":  1, "field_name":  "", "messages": ["This is the error message"]}]}
+[{"item":  1, "field_name":  "", "messages": ["This is the error message"]}]
 ```
 
 ##### Error specific to a field in a received dictionary
@@ -65,7 +65,7 @@ raise ValidationFailed(received_data, errors={"field 1": ["Invalid value"]})
 
 Will result in the following JSON response sent to the client:
 ```json
-{"fields":  [{"item":  1, "field_name":  "field 1", "messages": ["Invalid value"]}]}
+[{"item":  1, "field_name":  "field 1", "messages": ["Invalid value"]}]
 ```
 
 ##### Error specific to a field in a received list of dictionaries
@@ -81,7 +81,7 @@ raise ValidationFailed(received_data, errors={1: {"field 1": ["Invalid value"]}}
 
 Will result in the following JSON response sent to the client:
 ```json
-{"fields":  [{"item":  2, "field_name":  "field 1", "messages": ["Invalid value"]}]}
+[{"item":  2, "field_name":  "field 1", "messages": ["Invalid value"]}]
 ```
 
 #### Unauthorized
@@ -98,7 +98,7 @@ raise Unauthorized("The exception message")
 
 Will result in the following JSON response sent to the client:
 ```json
-{"message":  "The exception message"}
+"The exception message"
 ```
 
 #### Forbidden
@@ -115,7 +115,7 @@ raise Forbidden("The exception message")
 
 Will result in the following JSON response sent to the client:
 ```json
-{"message":  "The exception message"}
+"The exception message"
 ```
 
 #### Exception (this is the default handler)
@@ -130,7 +130,15 @@ raise Exception("The exception message")
 
 Will result in the following JSON response sent to the client:
 ```json
-{"message":  "The exception message"}
+"The exception message"
+```
+
+## Flask-RestX
+
+For the default handlers to work fine, you will have to disable the addition of "message" key within the exception results.
+
+```python
+application.config["ERROR_INCLUDE_MESSAGE"] = False
 ```
 
 ## How to install

@@ -30,30 +30,16 @@ class Forbidden(HTTPException):
 
 async def http_exception(request: Request, exc: HTTPException):
     """
-    required:
-        - message
-    properties:
-        message:
-            type: string
-            description: Description of the error.
-            example: This is a description of the error.
-    type: object
+    type: string
     """
-    return JSONResponse({"message": exc.detail}, status_code=exc.status_code)
+    return JSONResponse(exc.detail, status_code=exc.status_code)
 
 
 async def exception(request: Request, exc: Exception):
     """
-    required:
-        - message
-    properties:
-        message:
-            type: string
-            description: Description of the error.
-            example: This is a description of the error.
-    type: object
+    type: string
     """
-    return JSONResponse({"message": str(exc)}, status_code=500)
+    return JSONResponse(str(exc), status_code=500)
 
 
 DictErrors = Dict[str, List[str]]
@@ -89,30 +75,27 @@ class ValidationFailed(HTTPException):
 
 async def validation_failed_exception(request: Request, exc: ValidationFailed):
     """
-    properties:
-        fields:
-            type: array
-            items:
-                required:
-                    - field_name
-                    - item
-                properties:
-                    item:
-                        type: integer
-                        description: Position of the item that could not be validated.
-                        example: 1
-                    field_name:
-                        type: string
-                        description: Name of the field that could not be validated.
-                        example: sample_field_name
-                    messages:
-                        type: array
-                        items:
-                            type: string
-                            description: Reason why the validation failed.
-                            example: This is the reason why this field was not validated.
-                type: object
-    type: object
+    type: array
+    items:
+        required:
+            - field_name
+            - item
+        properties:
+            item:
+                type: integer
+                description: Position of the item that could not be validated.
+                example: 1
+            field_name:
+                type: string
+                description: Name of the field that could not be validated.
+                example: sample_field_name
+            messages:
+                type: array
+                items:
+                    type: string
+                    description: Reason why the validation failed.
+                    example: This is the reason why this field was not validated.
+        type: object
     """
     error_list = []
     for field_name_or_index, messages_or_fields in exc.errors.items():
@@ -135,7 +118,7 @@ async def validation_failed_exception(request: Request, exc: ValidationFailed):
                     "messages": messages_or_fields,
                 }
             )
-    return JSONResponse({"fields": error_list}, status_code=exc.status_code)
+    return JSONResponse(error_list, status_code=exc.status_code)
 
 
 exception_handlers = {

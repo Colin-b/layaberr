@@ -30,6 +30,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Software Development :: Build Tools",
     ],
     keywords=["error", "rest", "flask", "starlette"],
@@ -39,7 +40,7 @@ setup(
         "testing": [
             # Used to manage testing of a Flask application
             "flask-restx==0.2.*",
-            "pytest-flask==0.15.*",
+            "pytest-flask==1.*",
             # Used to manage testing of a Starlette application
             "starlette==0.13.*",
             "requests==2.*",

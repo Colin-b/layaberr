@@ -40,4 +40,4 @@ def test_bad_request_detail(client):
 def test_default(client):
     response = client.get("/default_error")
     assert response.status_code == 500
-    assert response.json() == {"message": ""}
+    assert response.json() == ""
