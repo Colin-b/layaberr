@@ -2,16 +2,16 @@ from typing import Union, List, Dict
 import logging
 from http import HTTPStatus
 
-from flask_restx import fields
+import flask_restx
 from werkzeug.exceptions import Unauthorized, Forbidden, BadRequest
 
 
 logger = logging.getLogger(__name__)
 
 
-def _unauthorized_exception_model(api):
+def _unauthorized_exception_model(api: flask_restx.Api):
     exception_details = {
-        "message": fields.String(
+        "message": flask_restx.fields.String(
             description="Description of the error.",
             required=True,
             example="This is a description of the error.",
@@ -20,7 +20,7 @@ def _unauthorized_exception_model(api):
     return api.model("Unauthorized", exception_details)
 
 
-def add_unauthorized_exception_handler(api):
+def add_unauthorized_exception_handler(api: flask_restx.Api):
     """
     Add the Unauthorized Exception handler.
 
@@ -38,7 +38,7 @@ def add_unauthorized_exception_handler(api):
     return HTTPStatus.UNAUTHORIZED, HTTPStatus.UNAUTHORIZED.description, exception_model
 
 
-def add_forbidden_exception_handler(api):
+def add_forbidden_exception_handler(api: flask_restx.Api):
     """
     Add the Forbidden Exception handler.
 
@@ -56,9 +56,9 @@ def add_forbidden_exception_handler(api):
     return HTTPStatus.FORBIDDEN, HTTPStatus.FORBIDDEN.description, exception_model
 
 
-def _exception_model(api):
+def _exception_model(api: flask_restx.Api):
     exception_details = {
-        "message": fields.String(
+        "message": flask_restx.fields.String(
             description="Description of the error.",
             required=True,
             example="This is a description of the error.",
@@ -67,7 +67,7 @@ def _exception_model(api):
     return api.model("Exception", exception_details)
 
 
-def add_exception_handler(api):
+def add_exception_handler(api: flask_restx.Api):
     """
     Add the default Exception handler.
 
@@ -89,9 +89,9 @@ def add_exception_handler(api):
     )
 
 
-def _bad_request_exception_model(api):
+def _bad_request_exception_model(api: flask_restx.Api):
     exception_details = {
-        "message": fields.String(
+        "message": flask_restx.fields.String(
             description="Description of the error.",
             required=True,
             example="This is a description of the error.",
@@ -100,7 +100,7 @@ def _bad_request_exception_model(api):
     return api.model("BadRequest", exception_details)
 
 
-def add_bad_request_exception_handler(api):
+def add_bad_request_exception_handler(api: flask_restx.Api):
     """
     Add the Bad Request Exception handler.
 
@@ -142,20 +142,20 @@ class ValidationFailed(Exception):
         return f"Errors: {self.errors}\nReceived: {self.received_data}"
 
 
-def _failed_field_validation_model(api):
+def _failed_field_validation_model(api: flask_restx.Api):
     exception_details = {
-        "item": fields.Integer(
+        "item": flask_restx.fields.Integer(
             description="Position of the item that could not be validated.",
             required=True,
             example=1,
         ),
-        "field_name": fields.String(
+        "field_name": flask_restx.fields.String(
             description="Name of the field that could not be validated.",
             required=True,
             example="sample_field_name",
         ),
-        "messages": fields.List(
-            fields.String(
+        "messages": flask_restx.fields.List(
+            flask_restx.fields.String(
                 description="Reason why the validation failed.",
                 required=True,
                 example="This is the reason why this field was not validated.",
@@ -165,14 +165,16 @@ def _failed_field_validation_model(api):
     return api.model("FieldValidationFailed", exception_details)
 
 
-def _failed_validation_model(api):
+def _failed_validation_model(api: flask_restx.Api):
     exception_details = {
-        "fields": fields.List(fields.Nested(_failed_field_validation_model(api)))
+        "fields": flask_restx.fields.List(
+            flask_restx.fields.Nested(_failed_field_validation_model(api))
+        )
     }
     return api.model("ValidationFailed", exception_details)
 
 
-def add_failed_validation_handler(api):
+def add_failed_validation_handler(api: flask_restx.Api):
     """
     Add the default ValidationFailed handler.
 
@@ -211,7 +213,19 @@ def add_failed_validation_handler(api):
     return 400, "Validation failed.", exception_model
 
 
-def add_error_handlers(api) -> Dict[str, dict]:
+def add_error_handlers(api: flask_restx.Api) -> Dict[str, dict]:
+    """
+    Subscribe error handlers for:
+        * werkzeug.exceptions.BadRequest
+        * layaberr.flask_restx.ValidationFailed
+        * werkzeug.exceptions.Unauthorized
+        * werkzeug.exceptions.Forbidden
+        * Exception
+
+    :param api: The Flask-RestX API that will handle those exceptions.
+    :return: A dictionary that can be used to document those error handlers in flask_restx.
+    As in @api.doc(**error_responses)
+    """
     bad_request = add_bad_request_exception_handler(api)
     failed_validation = add_failed_validation_handler(api)
     unauthorized = add_unauthorized_exception_handler(api)

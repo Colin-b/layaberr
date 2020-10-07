@@ -149,3 +149,213 @@ def test_validation_failed_list(client):
         "['first error 2', 'second error 2']}}\n"
         "Received: [{'key 1': 'value 1', 'key 2': 1}, {'key 1': 'value 2', 'key 2': 2}]",
     }
+
+
+def test_open_api_definition(client):
+    response = client.get("/swagger.json")
+    assert response.json == {
+        "swagger": "2.0",
+        "basePath": "/",
+        "paths": {
+            "/bad_request": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "HTTPStatus.BAD_REQUEST": {
+                            "description": "Bad request syntax or unsupported method",
+                            "schema": {"$ref": "#/definitions/BadRequest"},
+                        },
+                    },
+                    "operationId": "get_bad_request_error",
+                    "tags": ["default"],
+                }
+            },
+            "/default_error": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "HTTPStatus.UNAUTHORIZED": {
+                            "description": "No permission -- see authorization schemes",
+                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                        },
+                        "400": {
+                            "description": "Validation failed.",
+                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                        },
+                        "HTTPStatus.BAD_REQUEST": {
+                            "description": "Bad request syntax or unsupported method",
+                            "schema": {"$ref": "#/definitions/BadRequest"},
+                        },
+                    },
+                    "operationId": "get_default_error",
+                    "tags": ["default"],
+                }
+            },
+            "/forbidden": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "HTTPStatus.FORBIDDEN": {
+                            "description": "Request forbidden -- authorization will not help",
+                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                        },
+                    },
+                    "operationId": "get_forbidden_error",
+                    "tags": ["default"],
+                }
+            },
+            "/unauthorized": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "HTTPStatus.UNAUTHORIZED": {
+                            "description": "No permission -- see authorization schemes",
+                            "schema": {"$ref": "#/definitions/Unauthorized"},
+                        },
+                    },
+                    "operationId": "get_unauthorized_error",
+                    "tags": ["default"],
+                }
+            },
+            "/validation_failed_item": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "400": {
+                            "description": "Validation failed.",
+                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                        },
+                    },
+                    "operationId": "get_validation_failed_item_error",
+                    "tags": ["default"],
+                }
+            },
+            "/validation_failed_list": {
+                "get": {
+                    "responses": {
+                        "HTTPStatus.INTERNAL_SERVER_ERROR": {
+                            "description": "An unexpected error occurred.",
+                            "schema": {"$ref": "#/definitions/Exception"},
+                        },
+                        "400": {
+                            "description": "Validation failed.",
+                            "schema": {"$ref": "#/definitions/ValidationFailed"},
+                        },
+                    },
+                    "operationId": "get_validation_failed_list_error",
+                    "tags": ["default"],
+                }
+            },
+        },
+        "info": {"title": "API", "version": "1.0"},
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "tags": [{"name": "default", "description": "Default namespace"}],
+        "definitions": {
+            "BadRequest": {
+                "required": ["message"],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Description of the error.",
+                        "example": "This is a description of the error.",
+                    }
+                },
+                "type": "object",
+            },
+            "Unauthorized": {
+                "required": ["message"],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Description of the error.",
+                        "example": "This is a description of the error.",
+                    }
+                },
+                "type": "object",
+            },
+            "ValidationFailed": {
+                "properties": {
+                    "fields": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/FieldValidationFailed"},
+                    }
+                },
+                "type": "object",
+            },
+            "FieldValidationFailed": {
+                "required": ["field_name", "item"],
+                "properties": {
+                    "item": {
+                        "type": "integer",
+                        "description": "Position of the item that could not be validated.",
+                        "example": 1,
+                    },
+                    "field_name": {
+                        "type": "string",
+                        "description": "Name of the field that could not be validated.",
+                        "example": "sample_field_name",
+                    },
+                    "messages": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "description": "Reason why the validation failed.",
+                            "example": "This is the reason why this field was not validated.",
+                        },
+                    },
+                },
+                "type": "object",
+            },
+            "Exception": {
+                "required": ["message"],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Description of the error.",
+                        "example": "This is a description of the error.",
+                    }
+                },
+                "type": "object",
+            },
+        },
+        "responses": {
+            "ParseError": {"description": "When a mask can't be parsed"},
+            "MaskError": {"description": "When any error occurs on mask"},
+            "BadRequest": {
+                "description": "This is the Bad Request error handling",
+                "schema": {"$ref": "#/definitions/BadRequest"},
+            },
+            "Unauthorized": {
+                "description": "This is the Unauthorized error handling",
+                "schema": {"$ref": "#/definitions/Unauthorized"},
+            },
+            "Forbidden": {
+                "description": "This is the Forbidden error handling",
+                "schema": {"$ref": "#/definitions/Unauthorized"},
+            },
+            "ValidationFailed": {
+                "description": "This is the default validation error handling",
+                "schema": {"$ref": "#/definitions/ValidationFailed"},
+            },
+            "Exception": {
+                "description": "This is the default error handling",
+                "schema": {"$ref": "#/definitions/Exception"},
+            },
+        },
+    }
